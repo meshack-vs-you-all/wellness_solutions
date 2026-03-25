@@ -1,0 +1,11 @@
+{% if input.is_button %}
+    <button type="{{ input.input_type }}"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        {% if input.id %}id="{{ input.id }}"{% endif %}>{{ input.value }}</button>
+{% else %}
+    <input type="{{ input.input_type }}"
+        name="{% if input.name %}{{ input.name }}{% endif %}"
+        value="{{ input.value }}"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        {% if input.id %}id="{{ input.id }}"{% endif %} />
+{% endif %}

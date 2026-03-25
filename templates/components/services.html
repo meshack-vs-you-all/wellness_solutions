@@ -1,0 +1,70 @@
+{% load static compress %}
+
+<!-- Services Section -->
+<section id="services" class="relative w-full overflow-hidden py-16 md:py-24 bg-gray-50">
+    <div class="relative w-full">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-0 max-w-[1400px]">
+            <!-- Introduction Section -->
+            <div class="text-center mb-12 md:mb-20 max-w-3xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-900 leading-tight">
+                    Our Services
+                </h2>
+                <p class="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-gray-600">
+                    We offer a wide range of wellness solutions designed to improve your health, both individually and in the corporate environment.
+                </p>
+            </div>
+
+            <!-- Dynamic Services Section -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+                {% for service in services %}
+                <div class="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full transform hover:-translate-y-1">
+                    <!-- Service Image -->
+                    <div class="relative w-full aspect-[4/3] rounded-t-xl overflow-hidden">
+                        {% if service.image %}
+                        <img class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" 
+                             src="{{ service.image.url }}" 
+                             alt="{{ service.name }}">
+                        {% else %}
+                        <img class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" 
+                             src="{% static 'images/service-placeholder.jpg' %}" 
+                             alt="{{ service.name }}">
+                        {% endif %}
+                    </div>
+                    <!-- Service Content -->
+                    <div class="flex-1 p-6 sm:p-8 flex flex-col">
+                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
+                            <a href="{% url 'services:service-detail' service.pk %}" 
+                               class="hover:text-blue-600 transition-colors">
+                                {{ service.name }}
+                            </a>
+                        </h3>
+                        <p class="text-base text-gray-600 leading-relaxed mb-6 flex-grow">
+                            {{ service.description|truncatewords:20 }}
+                        </p>
+                        <a href="{% url 'services:service-detail' service.pk %}" 
+                           class="inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+                            Learn More
+                            <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                {% include "components/default_services.html" %}
+                {% endfor %}
+            </div>
+
+            <!-- CTA Button -->
+            <div class="mt-12 md:mt-20 text-center">
+                <a href="{% url 'services:service-list' %}" 
+                   class="inline-flex items-center justify-center px-8 py-4 text-lg font-medium rounded-lg text-white bg-primary hover:bg-primary-dark transition-colors shadow-lg hover:shadow-xl">
+                    View All Services
+                    <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

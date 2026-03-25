@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ proposal.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{{ proposal.title }}</h1>
+        <div>
+            {% if user.is_staff %}
+            <div class="flex space-x-4">
+                <a href="{% url 'services:proposal-update' proposal.pk %}"
+                   class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    {% trans "Edit" %}
+                </a>
+                <a href="{% url 'services:proposal-delete' proposal.pk %}"
+                   class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                    {% trans "Delete" %}
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Proposal Details" %}</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">{% trans "Organization" %}</dt>
+                        <dd class="col-sm-8">
+                            <a href="{% url 'services:organization-detail' proposal.organization.pk %}">
+                                {{ proposal.organization.name }}
+                            </a>
+                        </dd>
+
+                        <dt class="col-sm-4">{% trans "Date Submitted" %}</dt>
+                        <dd class="col-sm-8">{{ proposal.date_submitted|date }}</dd>
+
+                        <dt class="col-sm-4">{% trans "Valid Until" %}</dt>
+                        <dd class="col-sm-8">{{ proposal.valid_until|date }}</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">{% trans "Status" %}</dt>
+                        <dd class="col-sm-8">{{ proposal.get_status_display }}</dd>
+
+                        <dt class="col-sm-4">{% trans "Created" %}</dt>
+                        <dd class="col-sm-8">{{ proposal.created|date }}</dd>
+
+                        <dt class="col-sm-4">{% trans "Last Modified" %}</dt>
+                        <dd class="col-sm-8">{{ proposal.modified|date }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if proposal.programs.exists %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Programs" %}</h5>
+            <ul class="list-group">
+                {% for program in proposal.programs.all %}
+                <li class="list-group-item">
+                    <a href="{% url 'services:program-detail' program.pk %}">
+                        {{ program.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if proposal.custom_services %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Custom Services" %}</h5>
+            <div class="markdown-content">
+                {{ proposal.custom_services|linebreaks }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Pricing Details" %}</h5>
+            <div class="markdown-content">
+                {{ proposal.pricing_details|linebreaks }}
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Terms and Conditions" %}</h5>
+            <div class="markdown-content">
+                {{ proposal.terms_conditions|linebreaks }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

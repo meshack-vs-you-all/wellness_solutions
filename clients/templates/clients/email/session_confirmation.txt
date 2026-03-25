@@ -1,0 +1,18 @@
+Session Confirmation
+
+Dear {{ client.full_name }},
+
+Your session has been confirmed with the following details:
+
+Date: {{ session.booking.start_time|date:"l, F j, Y" }}
+Time: {{ session.booking.start_time|time:"g:i A" }} - {{ session.booking.end_time|time:"g:i A" }}
+Service: {{ session.booking.service.name }}
+Instructor: {{ session.booking.instructor.get_full_name }}
+Location: {{ session.booking.location.name }}
+
+Please arrive 5-10 minutes before your session time. If you need to cancel or reschedule, please do so at least 24 hours in advance.
+
+We look forward to seeing you!
+
+Best regards,
+{{ site_name }} Team

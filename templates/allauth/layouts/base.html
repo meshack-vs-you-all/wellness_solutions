@@ -1,0 +1,48 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block head_title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Wellness Solutions - Your Wellness Journey">
+    <meta name="author" content="Wellness Solutions">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    {% block css %}
+    <!-- Your Custom CSS -->
+    <link href="{% static 'css/dist/styles.css' %}" rel="stylesheet">
+    {% endblock %}
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-50">
+    {% block body %}
+        <div class="min-h-screen">
+            {% if messages %}
+                <div class="fixed top-0 right-0 m-4 z-50">
+                    {% for message in messages %}
+                        <div class="{% if message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-blue-100 text-blue-700{% endif %} px-4 py-3 rounded-lg shadow-md mb-3" role="alert">
+                            <p class="font-medium">{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% block content %}
+            {% endblock content %}
+
+            {% block modal %}{% endblock modal %}
+        </div>
+    {% endblock body %}
+
+    {% block javascript %}
+    <!-- Your Custom Javascript -->
+    {% endblock javascript %}
+</body>
+</html>

@@ -1,0 +1,277 @@
+{% extends "dashboard/admin_base.html" %}
+{% load i18n %}
+
+{% block dashboard_content %}
+<div class="flex-1">
+    <div class="py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <h1 class="text-2xl font-semibold text-gray-900">
+                {% if form.instance.pk %}{% trans "Edit Service" %}{% else %}{% trans "New Service" %}{% endif %}
+            </h1>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <div class="py-4">
+                <div class="bg-white shadow sm:rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <form method="post" enctype="multipart/form-data" id="serviceForm">
+                            {% csrf_token %}
+                            
+                            {% if form.errors %}
+                            <div class="rounded-md bg-red-50 p-4 mb-6">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-medium text-red-800">
+                                            {% trans "Please correct the errors below" %}
+                                        </h3>
+                                        <div class="mt-2 text-sm text-red-700">
+                                            <ul class="list-disc pl-5 space-y-1">
+                                                {% for field in form %}
+                                                    {% if field.errors %}
+                                                        {% for error in field.errors %}
+                                                            <li>{{ field.label }}: {{ error }}</li>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <div class="space-y-6">
+                                <!-- Category -->
+                                <div>
+                                    <label for="{{ form.category.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                        {% trans "Category" %} <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="mt-1">
+                                        <select name="{{ form.category.name }}" id="{{ form.category.id_for_label }}" required
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                            <option value="">---------</option>
+                                            {% for choice in form.category.field.choices %}
+                                                <option value="{{ choice.0 }}" {% if form.category.value == choice.0|stringformat:"s" %}selected{% endif %}>
+                                                    {{ choice.1 }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    {% if form.category.help_text %}
+                                        <p class="mt-2 text-sm text-gray-500">{{ form.category.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Name -->
+                                <div>
+                                    <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                        {% trans "Name" %} <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="mt-1">
+                                        <input type="text" name="{{ form.name.name }}" id="{{ form.name.id_for_label }}"
+                                            value="{{ form.name.value|default:'' }}" required
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                            placeholder="{% trans 'Enter service name' %}">
+                                    </div>
+                                    {% if form.name.help_text %}
+                                        <p class="mt-2 text-sm text-gray-500">{{ form.name.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Description -->
+                                <div>
+                                    <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                        {% trans "Description" %} <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea name="{{ form.description.name }}" id="{{ form.description.id_for_label }}" rows="3" required
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                            placeholder="{% trans 'Enter service description' %}">{{ form.description.value|default:'' }}</textarea>
+                                    </div>
+                                    {% if form.description.help_text %}
+                                        <p class="mt-2 text-sm text-gray-500">{{ form.description.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Duration -->
+                                <div>
+                                    <label for="{{ form.duration.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                        {% trans "Duration (minutes)" %} <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="mt-1">
+                                        <input type="number" name="{{ form.duration.name }}" id="{{ form.duration.id_for_label }}"
+                                            value="{{ form.duration.value|default:'' }}" required min="15" max="480"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                    </div>
+                                    {% if form.duration.help_text %}
+                                        <p class="mt-2 text-sm text-gray-500">{{ form.duration.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Max Participants -->
+                                <div>
+                                    <label for="{{ form.max_participants.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                        {% trans "Maximum Participants" %} <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="mt-1">
+                                        <input type="number" name="{{ form.max_participants.name }}" id="{{ form.max_participants.id_for_label }}"
+                                            value="{{ form.max_participants.value|default:'1' }}" required min="1" max="50"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                    </div>
+                                    {% if form.max_participants.help_text %}
+                                        <p class="mt-2 text-sm text-gray-500">{{ form.max_participants.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Base Price -->
+                                <div>
+                                    <label for="{{ form.base_price.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                        {% trans "Base Price" %} <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <span class="text-gray-500 sm:text-sm">$</span>
+                                        </div>
+                                        <input type="number" name="{{ form.base_price.name }}" id="{{ form.base_price.id_for_label }}"
+                                            value="{{ form.base_price.value|default:'' }}" required min="0" step="0.01"
+                                            class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md">
+                                    </div>
+                                    {% if form.base_price.help_text %}
+                                        <p class="mt-2 text-sm text-gray-500">{{ form.base_price.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Prerequisites -->
+                                <div>
+                                    <label for="{{ form.prerequisites.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                        {% trans "Prerequisites" %}
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea name="{{ form.prerequisites.name }}" id="{{ form.prerequisites.id_for_label }}" rows="3"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                            placeholder="{% trans 'Enter any prerequisites' %}">{{ form.prerequisites.value|default:'' }}</textarea>
+                                    </div>
+                                    {% if form.prerequisites.help_text %}
+                                        <p class="mt-2 text-sm text-gray-500">{{ form.prerequisites.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Target Areas -->
+                                <div>
+                                    <label for="{{ form.target_areas.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                        {% trans "Target Areas" %}
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea name="{{ form.target_areas.name }}" id="{{ form.target_areas.id_for_label }}" rows="3"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                            placeholder="{% trans 'Enter target areas' %}">{{ form.target_areas.value|default:'' }}</textarea>
+                                    </div>
+                                    {% if form.target_areas.help_text %}
+                                        <p class="mt-2 text-sm text-gray-500">{{ form.target_areas.help_text }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Corporate Eligible -->
+                                <div class="relative flex items-start">
+                                    <div class="flex items-center h-5">
+                                        <input type="checkbox" name="{{ form.is_corporate_eligible.name }}" id="{{ form.is_corporate_eligible.id_for_label }}"
+                                            {% if form.is_corporate_eligible.value %}checked{% endif %}
+                                            class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                                    </div>
+                                    <div class="ml-3 text-sm">
+                                        <label for="{{ form.is_corporate_eligible.id_for_label }}" class="font-medium text-gray-700">
+                                            {% trans "Corporate Eligible" %}
+                                        </label>
+                                        {% if form.is_corporate_eligible.help_text %}
+                                            <p class="text-gray-500">{{ form.is_corporate_eligible.help_text }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-5 sm:mt-6 sm:flex sm:flex-row-reverse">
+                                <button type="submit"
+                                    class="inline-flex justify-center w-full sm:ml-3 sm:w-auto px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm">
+                                    {% if form.instance.pk %}{% trans "Update" %}{% else %}{% trans "Create" %}{% endif %}
+                                </button>
+                                <a href="{% url 'services:service-list' %}"
+                                    class="mt-3 sm:mt-0 inline-flex justify-center w-full sm:w-auto px-4 py-2 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm">
+                                    {% trans "Cancel" %}
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('serviceForm');
+    
+    // Form validation
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        const requiredFields = form.querySelectorAll('[required]');
+        
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                isValid = false;
+                field.classList.add('border-red-500');
+                
+                // Add error message if it doesn't exist
+                let errorMsg = field.parentElement.querySelector('.error-message');
+                if (!errorMsg) {
+                    errorMsg = document.createElement('p');
+                    errorMsg.className = 'mt-2 text-sm text-red-600 error-message';
+                    errorMsg.textContent = 'This field is required';
+                    field.parentElement.appendChild(errorMsg);
+                }
+            }
+        });
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+
+    // Clear error styling on input
+    form.querySelectorAll('input, select, textarea').forEach(field => {
+        field.addEventListener('input', function() {
+            this.classList.remove('border-red-500');
+            const errorMsg = this.parentElement.querySelector('.error-message');
+            if (errorMsg) {
+                errorMsg.remove();
+            }
+        });
+    });
+
+    // Number input validation
+    const numberInputs = {
+        'duration': { min: 15, max: 480 },
+        'max_participants': { min: 1, max: 50 },
+        'base_price': { min: 0 }
+    };
+
+    Object.entries(numberInputs).forEach(([fieldName, constraints]) => {
+        const input = document.getElementById(`id_${fieldName}`);
+        if (input) {
+            input.addEventListener('input', function() {
+                let value = parseFloat(this.value);
+                if (value < constraints.min) {
+                    this.value = constraints.min;
+                } else if (constraints.max && value > constraints.max) {
+                    this.value = constraints.max;
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

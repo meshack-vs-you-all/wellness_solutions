@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ organization.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{{ organization.name }}</h1>
+        {% if user.is_staff %}
+        <div class="flex space-x-4">
+            <a href="{% url 'services:organization-update' organization.pk %}"
+               class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                {% trans "Edit" %}
+            </a>
+            <a href="{% url 'services:organization-delete' organization.pk %}"
+               class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                {% trans "Delete" %}
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Organization Details" %}</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">{% trans "Industry" %}</dt>
+                        <dd class="col-sm-8">{{ organization.industry }}</dd>
+
+                        <dt class="col-sm-4">{% trans "Contact Email" %}</dt>
+                        <dd class="col-sm-8">{{ organization.contact_email }}</dd>
+
+                        <dt class="col-sm-4">{% trans "Contact Phone" %}</dt>
+                        <dd class="col-sm-8">{{ organization.contact_phone }}</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">{% trans "Address" %}</dt>
+                        <dd class="col-sm-8">{{ organization.address }}</dd>
+
+                        <dt class="col-sm-4">{% trans "Employee Count" %}</dt>
+                        <dd class="col-sm-8">{{ organization.employee_count }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if organization.active_programs.exists %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Active Programs" %}</h5>
+            <ul class="list-group">
+                {% for program in organization.active_programs.all %}
+                <li class="list-group-item">
+                    <a href="{% url 'services:program-detail' program.pk %}">
+                        {{ program.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if organization.proposals.exists %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Proposals" %}</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Title" %}</th>
+                            <th>{% trans "Date Submitted" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Valid Until" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proposal in organization.proposals.all %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'services:proposal-detail' proposal.pk %}">
+                                    {{ proposal.title }}
+                                </a>
+                            </td>
+                            <td>{{ proposal.date_submitted|date }}</td>
+                            <td>{{ proposal.get_status_display }}</td>
+                            <td>{{ proposal.valid_until|date }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if organization.employees.exists %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">{% trans "Employees" %}</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Name" %}</th>
+                            <th>{% trans "Email" %}</th>
+                            <th>{% trans "Phone" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employee in organization.employees.all %}
+                        <tr>
+                            <td>{{ employee.get_full_name }}</td>
+                            <td>{{ employee.email }}</td>
+                            <td>{{ employee.phone_number }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  {% if form.instance.pk %}
+    {% trans "Edit Package" %}
+  {% else %}
+    {% trans "New Package" %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-3xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6">
+      {% if form.instance.pk %}
+        {% trans "Edit Package" %}
+      {% else %}
+        {% trans "New Package" %}
+      {% endif %}
+    </h1>
+
+    <div class="bg-white shadow rounded-lg p-6">
+      <form method="post" class="space-y-6">
+        {% csrf_token %}
+        
+        <!-- Basic Information -->
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {{ form.name|as_crispy_field }}
+          {{ form.organization|as_crispy_field }}
+        </div>
+
+        <!-- Service Details -->
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {{ form.service|as_crispy_field }}
+          {{ form.total_sessions|as_crispy_field }}
+        </div>
+
+        <!-- Pricing -->
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {{ form.price_per_session|as_crispy_field }}
+          {{ form.total_price|as_crispy_field }}
+        </div>
+
+        <!-- Expiry -->
+        <div>
+          {{ form.expiry_date|as_crispy_field }}
+        </div>
+
+        <!-- Submit Buttons -->
+        <div class="flex justify-end space-x-4">
+          <a href="{% url 'bookings:package-list' %}" class="bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-md">
+            {% trans "Cancel" %}
+          </a>
+          <button type="submit" class="bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded-md">
+            {% if form.instance.pk %}
+              {% trans "Save Changes" %}
+            {% else %}
+              {% trans "Create Package" %}
+            {% endif %}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize select2 for dropdowns
+    $('.select2').select2({
+      theme: 'tailwind'
+    });
+
+    // Calculate total price when price per session or total sessions change
+    const pricePerSessionInput = document.getElementById('id_price_per_session');
+    const totalSessionsInput = document.getElementById('id_total_sessions');
+    const totalPriceInput = document.getElementById('id_total_price');
+
+    function calculateTotalPrice() {
+      const pricePerSession = parseFloat(pricePerSessionInput.value) || 0;
+      const totalSessions = parseInt(totalSessionsInput.value) || 0;
+      const totalPrice = pricePerSession * totalSessions;
+      totalPriceInput.value = totalPrice.toFixed(2);
+    }
+
+    pricePerSessionInput.addEventListener('input', calculateTotalPrice);
+    totalSessionsInput.addEventListener('input', calculateTotalPrice);
+  });
+</script>
+{% endblock %}
+{% endblock %}

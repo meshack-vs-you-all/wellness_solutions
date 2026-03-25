@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "My Bookings" %}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">{% trans "My Bookings" %}</h1>
+    <a href="{% url 'bookings:booking-create' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      {% trans "Book a Session" %}
+    </a>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white shadow rounded-lg p-4 mb-6">
+    <form method="get" class="flex flex-wrap gap-4">
+      <div class="flex-1">
+        <label class="block text-sm font-medium text-gray-700">{% trans "Status" %}</label>
+        <select name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          <option value="">{% trans "All" %}</option>
+          {% for status_value, status_label in booking_statuses %}
+            <option value="{{ status_value }}" {% if request.GET.status == status_value %}selected{% endif %}>
+              {{ status_label }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="flex-1">
+        <label class="block text-sm font-medium text-gray-700">{% trans "From Date" %}</label>
+        <input type="date" name="date_from" value="{{ request.GET.date_from }}"
+               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+      </div>
+      <div class="flex-1">
+        <label class="block text-sm font-medium text-gray-700">{% trans "To Date" %}</label>
+        <input type="date" name="date_to" value="{{ request.GET.date_to }}"
+               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+      </div>
+      <div class="flex items-end">
+        <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+          {% trans "Filter" %}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Bookings List -->
+  {% if bookings %}
+    <div class="bg-white shadow overflow-hidden sm:rounded-md">
+      <ul class="divide-y divide-gray-200">
+        {% for booking in bookings %}
+          <li>
+            <a href="{% url 'bookings:booking-detail' booking.pk %}" class="block hover:bg-gray-50">
+              <div class="px-4 py-4 sm:px-6">
+                <div class="flex items-center justify-between">
+                  <div class="flex-1">
+                    <p class="text-sm font-medium text-blue-600 truncate">
+                      {{ booking.service.name }}
+                    </p>
+                    <p class="mt-2 flex items-center text-sm text-gray-500">
+                      <span class="truncate">{{ booking.instructor.user.get_full_name }}</span>
+                    </p>
+                  </div>
+                  <div class="ml-4 flex-shrink-0">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                               {% if booking.status == 'confirmed' %}bg-green-100 text-green-800
+                               {% elif booking.status == 'pending' %}bg-yellow-100 text-yellow-800
+                               {% elif booking.status == 'cancelled' %}bg-red-100 text-red-800
+                               {% endif %}">
+                      {{ booking.get_status_display }}
+                    </span>
+                  </div>
+                </div>
+                <div class="mt-2 sm:flex sm:justify-between">
+                  <div class="sm:flex">
+                    <p class="flex items-center text-sm text-gray-500">
+                      {{ booking.location.name }}
+                    </p>
+                  </div>
+                  <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                    <p>
+                      {{ booking.start_time|date:"F j, Y" }} at {{ booking.start_time|time:"g:i A" }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+      <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 mt-4">
+        <div class="flex-1 flex justify-between sm:hidden">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+              {% trans "Previous" %}
+            </a>
+          {% endif %}
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+              {% trans "Next" %}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="text-center py-12">
+      <h3 class="mt-2 text-sm font-medium text-gray-900">{% trans "No bookings found" %}</h3>
+      <p class="mt-1 text-sm text-gray-500">{% trans "Get started by creating a new booking." %}</p>
+      <div class="mt-6">
+        <a href="{% url 'bookings:booking-create' %}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          {% trans "Book a Session" %}
+        </a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

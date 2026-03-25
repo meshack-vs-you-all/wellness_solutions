@@ -1,0 +1,133 @@
+% Essential packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm,headheight=14pt]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[most]{tcolorbox}
+\usepackage{caption}
+\usepackage{needspace}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{booktabs}
+
+% Define colors
+\definecolor{primary}{RGB}{63,81,181}
+\definecolor{success}{RGB}{76,175,80}
+\definecolor{warning}{RGB}{255,152,0}
+\definecolor{danger}{RGB}{244,67,54}
+\definecolor{info}{RGB}{3,169,244}
+\definecolor{light}{RGB}{250,250,250}
+\definecolor{secondary}{RGB}{100,100,100}
+
+% Progress box macro for module status
+\newcommand{\progressbox}[3]{%
+    \begin{tcolorbox}[
+        enhanced,
+        boxrule=0.5pt,
+        colback=#3!10,
+        colframe=#3!50,
+        arc=1mm,
+        width=\linewidth
+    ]
+        \textbf{#1}\\[0.1cm]
+        \begin{tikzpicture}[x=1pt,y=1pt]
+            \fill[#3!20] (0,0) rectangle (\linewidth,8);
+            \fill[#3] (0,0) rectangle ({#2*\linewidth/100},8);
+        \end{tikzpicture}\\[-0.1cm]
+        \hfill#2\%
+    \end{tcolorbox}%
+}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Chapter style
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries}
+{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{-50pt}{40pt}
+
+% Section style
+\titleformat{\section}
+{\color{primary}\normalfont\Large\bfseries}
+{\thesection}{1em}{}
+
+% Subsection style
+\titleformat{\subsection}
+{\color{secondary}\normalfont\large\bfseries}
+{\thesubsection}{1em}{}
+
+% Spacing
+\titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+\titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+% Code style
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    breakatwhitespace=true,
+    showstringspaces=false,
+    numbers=left,
+    numberstyle=\tiny,
+    frame=single,
+    rulecolor=\color{black!30},
+    backgroundcolor=\color{white},
+    numbersep=5pt,
+    xleftmargin=15pt,
+    xrightmargin=5pt,
+    aboveskip=10pt,
+    belowskip=10pt
+}
+
+% Table styles
+\setlist{nosep}
+
+% Hyperref settings
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primary,
+    filecolor=primary,
+    urlcolor=primary,
+}
+
+% Table of contents depth
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{2}
+
+% Code block styling
+\lstset{
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{light},
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!60!black},
+    stringstyle=\color{orange},
+    breaklines=true,
+    breakatwhitespace=true,
+    showspaces=false,
+    showtabs=false,
+    showstringspaces=false,
+    tabsize=2
+}
+
+% Header and footer
+\fancyhead[L]{\textcolor{primary}{\leftmark}}
+\fancyhead[R]{\textcolor{secondary}{Final Project Review}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}

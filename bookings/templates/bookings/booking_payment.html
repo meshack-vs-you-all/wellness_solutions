@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% trans "Make Payment" %}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6">{% trans "Make Payment" %}</h1>
+
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+      <!-- Booking Summary -->
+      <div class="px-4 py-5 sm:px-6 bg-gray-50">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">{% trans "Booking Details" %}</h3>
+        <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ booking.booking_number }}</p>
+      </div>
+      <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+          <div>
+            <dt class="text-sm font-medium text-gray-500">{% trans "Service" %}</dt>
+            <dd class="mt-1 text-sm text-gray-900">{{ booking.service.name }}</dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500">{% trans "Date & Time" %}</dt>
+            <dd class="mt-1 text-sm text-gray-900">
+              {{ booking.start_time|date:"F j, Y" }} at {{ booking.start_time|time:"g:i A" }}
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500">{% trans "Total Amount" %}</dt>
+            <dd class="mt-1 text-sm text-gray-900">{{ booking.total_price }}</dd>
+          </div>
+          <div>
+            <dt class="text-sm font-medium text-gray-500">{% trans "Amount Paid" %}</dt>
+            <dd class="mt-1 text-sm text-gray-900">
+              {% with paid_amount=booking.payments.paid.aggregate.total_amount %}
+                {{ paid_amount|default:0 }}
+              {% endwith %}
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Payment Form -->
+      <form method="post" class="px-4 py-5 sm:px-6 space-y-6">
+        {% csrf_token %}
+        
+        {{ form|crispy }}
+
+        <div class="flex justify-end space-x-4">
+          <a href="{% url 'bookings:booking-detail' booking.pk %}" class="bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-md">
+            {% trans "Back" %}
+          </a>
+          <button type="submit" class="bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 rounded-md">
+            {% trans "Process Payment" %}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

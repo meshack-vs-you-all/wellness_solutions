@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-g" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Wellness Solutions - Fitness & Stretching Studio Management"
+    />
+    
+    <!-- Open Graph / Meta -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jpfwellnesssolutions.com/">
+    <meta property="og:title" content="Wellness Solutions - Elevate Your Wellness">
+    <meta property="og:description" content="A comprehensive web application for bookings, payments, and user management at Wellness Solutions.">
+    <meta property="og:image" content="https://jpfwellnesssolutions.com/static/images/og-image.jpg">
+
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '{YOUR_PIXEL_ID}');
+    fbq('track', 'PageView');
+    </script>
+    <!-- End Meta Pixel Code -->
+
+    <title>Wellness Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: {
+                DEFAULT: '#4A90E2',
+                light: '#7FD5EA',
+                dark: '#3A7BC8'
+              },
+              secondary: '#7FD5EA',
+              success: '#50C878',
+              background: '#F8F9FA',
+              'neutral-900': '#111827',
+              'neutral-800': '#1f2937',
+              'neutral-700': '#374151',
+              'neutral-600': '#4b5563',
+              'neutral-500': '#6b7280',
+              'neutral-400': '#9ca3af',
+              'neutral-300': '#d1d5db',
+              'neutral-200': '#e5e7eb',
+              'neutral-100': '#f3f4f6',
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.8.2",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.543.0",
+    "recharts": "https://aistudiocdn.com/recharts@^3.2.0",
+    "axios": "https://aistudiocdn.com/axios@^1.7.2",
+    "react-hook-form": "https://aistudiocdn.com/react-hook-form@^7.52.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-background text-neutral-800 dark:bg-neutral-900 dark:text-neutral-200">
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id={YOUR_PIXEL_ID}&ev=PageView&noscript=1"
+    /></noscript>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

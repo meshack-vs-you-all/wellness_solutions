@@ -1,0 +1,55 @@
+{% extends "dashboard/admin_base.html" %}
+{% load i18n %}
+
+{% block title %}Service Categories{% endblock %}
+
+{% block dashboard_content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Service Categories</h1>
+        {% if user.is_staff %}
+        <a href="{% url 'services:category-create' %}" 
+           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Add Category
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Categories Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for category in categories %}
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="p-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900">{{ category.name }}</h3>
+                        <p class="text-sm text-gray-500">{{ category.get_type_display }}</p>
+                    </div>
+                    <span class="px-2 py-1 text-xs font-medium {% if category.is_active %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %} rounded-full">
+                        {{ category.is_active|yesno:"Active,Inactive" }}
+                    </span>
+                </div>
+                <p class="mt-2 text-sm text-gray-600">{{ category.description|truncatewords:30 }}</p>
+                <div class="mt-4 flex justify-end space-x-2">
+                    <a href="{% url 'services:category-detail' category.pk %}" 
+                       class="text-blue-500 hover:text-blue-700">{% trans "View" %}</a>
+                    {% if user.is_staff %}
+                    <a href="{% url 'services:category-update' category.pk %}" 
+                       class="text-indigo-600 hover:text-indigo-900">{% trans "Edit" %}</a>
+                    <a href="{% url 'services:category-delete' category.pk %}" 
+                       class="text-red-600 hover:text-red-900">{% trans "Delete" %}</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full">
+            <div class="text-center py-12">
+                <h3 class="text-lg font-medium text-gray-900">No categories found</h3>
+                <p class="mt-2 text-sm text-gray-500">Get started by adding a new service category.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

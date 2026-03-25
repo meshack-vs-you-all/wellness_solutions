@@ -1,0 +1,187 @@
+{% load static %}
+
+<!-- Settings Section -->
+<div class="space-y-6">
+    <!-- Section Header -->
+    <div>
+        <h2 class="text-lg font-medium text-gray-900">Account Settings</h2>
+        <p class="mt-1 text-sm text-gray-500">Manage your account preferences and settings.</p>
+    </div>
+
+    <!-- Settings Tabs -->
+    <div x-data="{ activeTab: 'profile' }" class="bg-white shadow rounded-lg">
+        <!-- Tab Navigation -->
+        <div class="border-b border-gray-200">
+            <nav class="-mb-px flex space-x-8 px-6" aria-label="Tabs">
+                <button @click="activeTab = 'profile'" :class="{'border-blue-500 text-blue-600': activeTab === 'profile', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'profile'}" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    Profile Information
+                </button>
+                <button @click="activeTab = 'notifications'" :class="{'border-blue-500 text-blue-600': activeTab === 'notifications', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'notifications'}" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    Notifications
+                </button>
+                <button @click="activeTab = 'preferences'" :class="{'border-blue-500 text-blue-600': activeTab === 'preferences', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'preferences'}" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    Preferences
+                </button>
+            </nav>
+        </div>
+
+        <!-- Profile Tab -->
+        <div x-show="activeTab === 'profile'" class="p-6">
+            <form class="space-y-6">
+                <!-- Profile Photo -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Photo</label>
+                    <div class="mt-2 flex items-center space-x-5">
+                        <div class="flex-shrink-0">
+                            <div class="relative">
+                                <img class="h-16 w-16 rounded-full" src="{% static 'images/default-avatar.png' %}" alt="">
+                                <span class="absolute inset-0 shadow-inner rounded-full" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <button type="button" class="bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Change
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Name -->
+                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="sm:col-span-3">
+                        <label for="first_name" class="block text-sm font-medium text-gray-700">First name</label>
+                        <div class="mt-1">
+                            <input type="text" name="first_name" id="first_name" autocomplete="given-name" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-3">
+                        <label for="last_name" class="block text-sm font-medium text-gray-700">Last name</label>
+                        <div class="mt-1">
+                            <input type="text" name="last_name" id="last_name" autocomplete="family-name" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="sm:col-span-4">
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                        <div class="mt-1">
+                            <input id="email" name="email" type="email" autocomplete="email" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-3">
+                        <label for="phone" class="block text-sm font-medium text-gray-700">Phone number</label>
+                        <div class="mt-1">
+                            <input type="tel" name="phone" id="phone" autocomplete="tel" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Notifications Tab -->
+        <div x-show="activeTab === 'notifications'" class="p-6">
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Email Notifications</h3>
+                    <p class="mt-1 text-sm text-gray-500">Choose what updates you want to receive.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="booking_reminders" name="booking_reminders" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="booking_reminders" class="font-medium text-gray-700">Booking Reminders</label>
+                            <p class="text-gray-500">Get notified about your upcoming sessions.</p>
+                        </div>
+                    </div>
+
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="promotions" name="promotions" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="promotions" class="font-medium text-gray-700">Promotions</label>
+                            <p class="text-gray-500">Receive updates about special offers and new packages.</p>
+                        </div>
+                    </div>
+
+                    <div class="relative flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="newsletter" name="newsletter" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="newsletter" class="font-medium text-gray-700">Newsletter</label>
+                            <p class="text-gray-500">Get tips, news and updates about stretching and wellness.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="button" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Save Preferences
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preferences Tab -->
+        <div x-show="activeTab === 'preferences'" class="p-6">
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Session Preferences</h3>
+                    <p class="mt-1 text-sm text-gray-500">Set your default preferences for booking sessions.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Preferred Instructors -->
+                    <div>
+                        <label for="preferred_instructors" class="block text-sm font-medium text-gray-700">Preferred Instructors</label>
+                        <select id="preferred_instructors" name="preferred_instructors" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <option>No preference</option>
+                            <option>Sarah Johnson</option>
+                            <option>Mike Smith</option>
+                        </select>
+                    </div>
+
+                    <!-- Preferred Time Slots -->
+                    <div>
+                        <label for="preferred_time" class="block text-sm font-medium text-gray-700">Preferred Time Slots</label>
+                        <select id="preferred_time" name="preferred_time" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <option>No preference</option>
+                            <option>Morning (6 AM - 12 PM)</option>
+                            <option>Afternoon (12 PM - 5 PM)</option>
+                            <option>Evening (5 PM - 10 PM)</option>
+                        </select>
+                    </div>
+
+                    <!-- Session Duration -->
+                    <div>
+                        <label for="session_duration" class="block text-sm font-medium text-gray-700">Default Session Duration</label>
+                        <select id="session_duration" name="session_duration" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <option>30 minutes</option>
+                            <option>45 minutes</option>
+                            <option>60 minutes</option>
+                            <option>90 minutes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="button" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Save Preferences
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

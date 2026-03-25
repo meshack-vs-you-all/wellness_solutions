@@ -1,0 +1,75 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+# Function to check if postgres is ready
+postgres_ready() {
+python << END
+import sys
+import psycopg2
+try:
+    psycopg2.connect(
+        dbname="${POSTGRES_DB}",
+        user="${POSTGRES_USER}",
+        password="${POSTGRES_PASSWORD}",
+        host="${POSTGRES_HOST}",
+        port="${POSTGRES_PORT}",
+    )
+except psycopg2.OperationalError:
+    sys.exit(-1)
+sys.exit(0)
+END
+}
+
+# Function to check if redis is ready
+redis_ready() {
+python << END
+import sys
+import redis
+try:
+    redis.Redis.from_url("${REDIS_URL}").ping()
+except redis.exceptions.ConnectionError:
+    sys.exit(-1)
+sys.exit(0)
+END
+}
+
+# Only set permissions for directories that need it
+setup_permissions() {
+    local dirs_to_fix=(
+        "/app/media"
+        "/app/static"
+        "/app/jpf_stretch_hub/media"
+        "/app/jpf_stretch_hub/static"
+    )
+
+    for dir in "${dirs_to_fix[@]}"; do
+        if [ -d "$dir" ]; then
+            echo "🔒 Setting permissions for $dir"
+            sudo chown -R devuser:devuser "$dir"
+            sudo chmod -R u+rw "$dir"
+        fi
+    done
+}
+
+# Wait for postgres
+until postgres_ready; do
+  echo '🐘 Waiting for PostgreSQL...'
+  sleep 1
+done
+echo "✅ PostgreSQL is ready!"
+
+# Wait for redis
+until redis_ready; do
+  echo '🔄 Waiting for Redis...'
+  sleep 1
+done
+echo "✅ Redis is ready!"
+
+# Setup correct permissions only where needed
+setup_permissions
+
+# Execute the main command
+exec "$@"

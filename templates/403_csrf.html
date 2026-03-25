@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Forbidden (403) - CSRF Error{% endblock title %}
+{% block content %}
+  <div class="text-center py-12">
+    <h1 class="text-4xl font-semibold text-gray-700">Forbidden (403) - CSRF Error</h1>
+    <h3 class="text-2xl mt-4 text-gray-600">Something went wrong with the request.</h3>
+    <p class="mt-4 text-gray-500">
+      It seems the page you tried to access didn’t include a valid security token (CSRF). This is to protect your data from malicious attacks. 
+    </p>
+    <p class="mt-6 text-lg text-gray-700">
+      Please refresh the page and try again. If the issue persists, feel free to contact our support team.
+    </p>
+  </div>
+{% endblock content %}

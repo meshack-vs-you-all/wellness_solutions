@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load account %}
+
+{% block head_title %}{% trans "Verify Your Email Address" %}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-gray-900 shadow-xl rounded-lg overflow-hidden">
+            <div class="p-8 text-center">
+                <h1 class="text-3xl font-bold text-white mb-6">{% trans "Verify Your Email Address" %}</h1>
+                
+                {% if confirmation %}
+                    <div class="text-center mb-8">
+                        <p class="text-gray-300 text-lg mb-6">
+                            {% user_display confirmation.email_address.user as user_display %}
+                            {% blocktrans with confirmation.email_address.email as email %}
+                            Please confirm that <span class="font-semibold text-white">{{ email }}</span> is your email address.
+                            {% endblocktrans %}
+                        </p>
+                        
+                        <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                            {% csrf_token %}
+                            <button type="submit" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                {% trans 'Confirm Email Address' %}
+                            </button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="text-center">
+                        <div class="bg-yellow-900 bg-opacity-50 rounded-lg p-6 mb-6">
+                            <div class="flex items-center justify-center">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-6 w-6 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-yellow-200 text-lg">
+                                        {% url 'account_email' as email_url %}
+                                        {% blocktrans %}This email confirmation link has expired or is invalid. Please <a href="{{ email_url }}" class="font-medium underline hover:text-yellow-100">request a new verification email</a>.{% endblocktrans %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="mt-8 text-gray-400 text-sm">
+                    <p>{% blocktrans %}If you don't see the verification email in your inbox, please check your spam folder. Contact us if you do not receive the verification email within a few minutes.{% endblocktrans %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

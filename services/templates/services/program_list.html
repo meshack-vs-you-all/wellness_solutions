@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">{% trans "Corporate Programs" %}</h1>
+        {% if user.is_staff %}
+        <a href="{% url 'services:program-create' %}" 
+           class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+            {% trans "Add Program" %}
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div class="grid grid-cols-1 gap-4 sm:px-6 sm:py-5">
+            {% for program in programs %}
+            <div class="border-b border-gray-200 pb-4 last:border-b-0">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900">{{ program.name }}</h3>
+                        <p class="mt-1 text-sm text-gray-500">{{ program.description|truncatewords:30 }}</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <a href="{% url 'services:program-detail' program.pk %}"
+                           class="text-blue-600 hover:text-blue-900">{% trans "View" %}</a>
+                        {% if user.is_staff %}
+                        <a href="{% url 'services:program-update' program.pk %}"
+                           class="text-indigo-600 hover:text-indigo-900">{% trans "Edit" %}</a>
+                        <a href="{% url 'services:program-delete' program.pk %}"
+                           class="text-red-600 hover:text-red-900">{% trans "Delete" %}</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="mt-2 grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <span class="font-medium">{% trans "Duration:" %}</span> {{ program.duration }}
+                    </div>
+                    <div>
+                        <span class="font-medium">{% trans "Price:" %}</span> {{ program.price }}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-4">
+                <p class="text-gray-500">{% trans "No corporate programs available." %}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

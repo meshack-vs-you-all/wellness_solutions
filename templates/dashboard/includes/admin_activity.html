@@ -1,0 +1,36 @@
+<!-- Recent Activity -->
+<div class="mt-8">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-medium text-gray-900">Recent Activity</h2>
+        <a href="{% url 'admin:admin_log_changelist' %}" class="text-sm font-medium text-indigo-600 hover:text-indigo-900">View all activity</a>
+    </div>
+    
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <ul role="list" class="divide-y divide-gray-200">
+            {% for activity in recent_activities %}
+            <li class="px-4 py-4 sm:px-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <img class="h-8 w-8 rounded-full" src="{{ activity.user.avatar.url|default:'/static/images/default-avatar.png' }}" alt="">
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">{{ activity.user.get_full_name }}</p>
+                            <p class="text-sm text-gray-500">{{ activity.description }}</p>
+                        </div>
+                    </div>
+                    <div class="ml-4 flex-shrink-0">
+                        <span class="text-sm text-gray-500">{{ activity.created_at|naturaltime }}</span>
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <li class="px-4 py-5 sm:px-6">
+                <div class="text-center text-sm text-gray-500">
+                    No recent activity
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

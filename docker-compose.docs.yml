@@ -1,0 +1,22 @@
+services:
+  docs:
+    image: wellness_solutions_local_docs
+    container_name: wellness_solutions_local_docs
+    build:
+      context: .
+      dockerfile: ./compose/local/docs/Dockerfile
+    env_file:
+      - ./.envs/.local/.django
+    environment:
+      - PYTHONPATH=/app
+    volumes:
+      - ./docs:/docs:z
+      - .:/app:z
+      - docs_build:/home/docs/build
+    user: docs
+    ports:
+      - '9000:9000'
+    command: /start-docs
+
+volumes:
+  docs_build:

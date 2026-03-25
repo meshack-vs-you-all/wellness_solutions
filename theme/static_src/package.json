@@ -1,0 +1,33 @@
+{
+  "name": "theme",
+  "version": "3.6.0",
+  "description": "",
+  "scripts": {
+    "start": "npm run dev",
+    "build": "npm run build:clean && npm run build:sass && npm run build:postcss",
+    "build:clean": "rimraf ../static/css/dist",
+    "build:sass": "sass --style compressed src/styles.scss ../static/css/dist/styles.css",
+    "build:postcss": "postcss ../static/css/dist/styles.css -o ../static/css/dist/styles.css",
+    "dev": "concurrently \"npm run dev:sass\" \"npm run dev:postcss\"",
+    "dev:sass": "sass --watch src/styles.scss:../static/css/dist/styles.css",
+    "dev:postcss": "postcss --watch ../static/css/dist/styles.css -o ../static/css/dist/styles.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/typography": "^0.5.9",
+    "autoprefixer": "^10.4.14",
+    "concurrently": "^8.0.1",
+    "postcss": "^8.4.23",
+    "postcss-cli": "^10.1.0",
+    "postcss-import": "^15.1.0",
+    "postcss-nested": "^6.0.1",
+    "postcss-simple-vars": "^7.0.1",
+    "rimraf": "^5.0.1",
+    "sass": "^1.62.1",
+    "tailwindcss": "^3.3.2"
+  }
+}

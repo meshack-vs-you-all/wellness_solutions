@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Manage Availability - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="pb-5 border-b border-gray-200 sm:flex sm:items-center sm:justify-between">
+            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                Manage Availability
+            </h2>
+            <div class="mt-3 sm:mt-0 sm:ml-4">
+                <a href="{% url 'schedules:schedule-create' %}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Add Schedule
+                </a>
+                <a href="{% url 'schedules:blackoutdate-create' %}" class="ml-3 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Add Blackout Date
+                </a>
+            </div>
+        </div>
+
+        <!-- Regular Schedule Section -->
+        <div class="mt-8">
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Regular Schedule</h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500">Your weekly recurring schedule.</p>
+                </div>
+                <div class="border-t border-gray-200">
+                    {% if schedules %}
+                        <ul class="divide-y divide-gray-200">
+                            {% for schedule in schedules %}
+                                <li class="px-4 py-4 sm:px-6">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-indigo-600">{{ schedule.get_weekday_display }}</p>
+                                            <p class="text-sm text-gray-500">{{ schedule.start_time|time:"g:i A" }} - {{ schedule.end_time|time:"g:i A" }}</p>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <a href="{% url 'schedules:schedule-update' schedule.pk %}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                            <a href="{% url 'schedules:schedule-delete' schedule.pk %}" class="text-red-600 hover:text-red-900">Delete</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class="px-4 py-5 sm:px-6 text-center text-gray-500">
+                            No regular schedule set. Click "Add Schedule" to create one.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Time Slots -->
+        <div class="mt-8">
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Upcoming Time Slots</h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500">Your next available time slots.</p>
+                </div>
+                <div class="border-t border-gray-200">
+                    {% if upcoming_slots %}
+                        <ul class="divide-y divide-gray-200">
+                            {% for slot in upcoming_slots %}
+                                <li class="px-4 py-4 sm:px-6">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-indigo-600">{{ slot.start_datetime|date:"l, F j" }}</p>
+                                            <p class="text-sm text-gray-500">{{ slot.start_datetime|time:"g:i A" }} - {{ slot.end_datetime|time:"g:i A" }}</p>
+                                            <p class="text-xs text-gray-400">Status: {{ slot.get_status_display }}</p>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <a href="{% url 'schedules:timeslot-update' slot.pk %}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                            <a href="{% url 'schedules:timeslot-delete' slot.pk %}" class="text-red-600 hover:text-red-900">Delete</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class="px-4 py-5 sm:px-6 text-center text-gray-500">
+                            No upcoming time slots found.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Blackout Dates -->
+        <div class="mt-8">
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Blackout Dates</h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500">Periods when you're unavailable.</p>
+                </div>
+                <div class="border-t border-gray-200">
+                    {% if blackout_dates %}
+                        <ul class="divide-y divide-gray-200">
+                            {% for blackout in blackout_dates %}
+                                <li class="px-4 py-4 sm:px-6">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-indigo-600">
+                                                {{ blackout.start_date|date:"M j, Y" }} - {{ blackout.end_date|date:"M j, Y" }}
+                                            </p>
+                                            <p class="text-sm text-gray-500">{{ blackout.reason }}</p>
+                                            {% if blackout.is_recurring %}
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    Recurring
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <a href="{% url 'schedules:blackoutdate-update' blackout.pk %}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                            <a href="{% url 'schedules:blackoutdate-delete' blackout.pk %}" class="text-red-600 hover:text-red-900">Delete</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class="px-4 py-5 sm:px-6 text-center text-gray-500">
+                            No blackout dates set.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

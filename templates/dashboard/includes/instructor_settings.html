@@ -1,0 +1,148 @@
+<!-- Settings -->
+<div class="space-y-6">
+    <!-- Profile Settings -->
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Profile Settings</h3>
+            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                <p>Update your personal information and preferences.</p>
+            </div>
+            <div class="mt-5">
+                <form method="POST" action="{% url 'users:instructor-profile-update' %}" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-6 gap-6">
+                        <!-- First Name -->
+                        <div class="col-span-6 sm:col-span-3">
+                            <label for="first_name" class="block text-sm font-medium text-gray-700">First name</label>
+                            <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}"
+                                   class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="col-span-6 sm:col-span-3">
+                            <label for="last_name" class="block text-sm font-medium text-gray-700">Last name</label>
+                            <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}"
+                                   class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-span-6 sm:col-span-4">
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                            <input type="email" name="email" id="email" value="{{ user.email }}"
+                                   class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="col-span-6 sm:col-span-4">
+                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone number</label>
+                            <input type="tel" name="phone" id="phone" value="{{ user.phone }}"
+                                   class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit"
+                                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Availability Settings -->
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Availability Settings</h3>
+            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                <p>Set your working hours and availability.</p>
+            </div>
+            <div class="mt-5">
+                <form method="POST" action="{% url 'schedules:instructor-availability-update' %}" class="space-y-6">
+                    {% csrf_token %}
+                    {% for day in weekdays %}
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input type="checkbox" name="available_{{ day.lower }}" id="available_{{ day.lower }}"
+                                   class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                   {% if day.lower in availability %}checked{% endif %}>
+                            <label for="available_{{ day.lower }}" class="ml-2 block text-sm text-gray-900">
+                                {{ day }}
+                            </label>
+                        </div>
+                        <div class="flex space-x-4">
+                            <div>
+                                <label for="start_{{ day.lower }}" class="sr-only">Start time</label>
+                                <input type="time" name="start_{{ day.lower }}" id="start_{{ day.lower }}"
+                                       value="{{ availability|get_item:day.lower|get_item:'start' }}"
+                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                            <div>
+                                <label for="end_{{ day.lower }}" class="sr-only">End time</label>
+                                <input type="time" name="end_{{ day.lower }}" id="end_{{ day.lower }}"
+                                       value="{{ availability|get_item:day.lower|get_item:'end' }}"
+                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <div class="flex justify-end">
+                        <button type="submit"
+                                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Save Availability
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Settings -->
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Notification Settings</h3>
+            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                <p>Choose how you want to receive notifications.</p>
+            </div>
+            <div class="mt-5">
+                <form method="POST" action="{% url 'instructor_notifications_update' %}" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input type="checkbox" name="email_notifications" id="email_notifications"
+                                       class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                       {% if notifications.email %}checked{% endif %}>
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="email_notifications" class="font-medium text-gray-700">Email notifications</label>
+                                <p class="text-gray-500">Get notified about new bookings and changes via email.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input type="checkbox" name="sms_notifications" id="sms_notifications"
+                                       class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                       {% if notifications.sms %}checked{% endif %}>
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="sms_notifications" class="font-medium text-gray-700">SMS notifications</label>
+                                <p class="text-gray-500">Receive text messages for important updates.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit"
+                                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Save Notification Settings
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

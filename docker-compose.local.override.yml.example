@@ -1,0 +1,25 @@
+# Docker Compose Override for Port Conflicts
+# 
+# If you have existing postgres/redis containers running, you have two options:
+#
+# Option 1: Use this override file to change ports
+#   docker-compose -f docker-compose.local.yml -f docker-compose.local.override.yml up
+#
+# Option 2: Use existing services (recommended) - see docker-compose.local.external.yml.example
+
+version: '3.8'
+
+services:
+  postgres:
+    ports:
+      - "5433:5432"  # Changed from 5432 to avoid conflict
+
+  redis:
+    ports:
+      - "6380:6379"  # Changed from 6379 to avoid conflict
+
+  mailpit:
+    ports:
+      - "8026:8025"  # Changed from 8025 to avoid conflict (if needed)
+      - "1026:1025"  # Changed from 1025 to avoid conflict (if needed)
+

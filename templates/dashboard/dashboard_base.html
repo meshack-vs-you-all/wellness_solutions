@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% load static compress i18n %}
+
+{% block extra_css %}
+{% compress css %}
+<style>
+    /* Message Animation */
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+
+    .message-container {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 50;
+        pointer-events: none;
+    }
+
+    .message {
+        animation: slideIn 0.5s ease forwards;
+        margin-bottom: 0.5rem;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        max-width: 24rem;
+        pointer-events: auto;
+    }
+
+    .message.success { background-color: #DEF7EC; border: 1px solid #31C48D; color: #03543F; }
+    .message.error { background-color: #FDE8E8; border: 1px solid #F98080; color: #9B1C1C; }
+    .message.warning { background-color: #FDF6B2; border: 1px solid #E3A008; color: #8E4B10; }
+    .message.info { background-color: #E1EFFE; border: 1px solid #3F83F8; color: #1E429F; }
+    .message.fade-out { animation: fadeOut 0.5s ease forwards; }
+
+    /* Sidebar Transitions */
+    .sidebar-backdrop {
+        transition: opacity 300ms ease-in-out;
+    }
+
+    .sidebar-backdrop.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .sidebar-backdrop.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .mobile-sidebar {
+        transition: transform 300ms ease-in-out;
+    }
+
+    .mobile-sidebar.hidden {
+        transform: translateX(-100%);
+    }
+
+    .mobile-sidebar.visible {
+        transform: translateX(0);
+    }
+
+    /* Navigation Hover Effects */
+    .nav-link {
+        transition: all 0.2s ease-in-out;
+    }
+    
+    .nav-link:hover .nav-icon {
+        transform: translateX(2px);
+    }
+
+    .nav-icon {
+        transition: transform 0.2s ease-in-out;
+    }
+
+    @media (min-width: 768px) {
+        .mobile-sidebar,
+        .sidebar-backdrop {
+            display: none !important;
+        }
+    }
+</style>
+{% endcompress %}
+{% endblock %}
+
+{% block content %}
+<div class="h-screen flex overflow-hidden bg-gray-100" id="dashboard">
+    <!-- Message Container -->
+    <div id="message-container" class="message-container"></div>
+
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-gray-600 bg-opacity-75 z-40 md:hidden sidebar-backdrop hidden"></div>
+
+    <!-- Mobile Sidebar -->
+    <div id="mobile-sidebar" class="fixed inset-y-0 flex flex-col flex-1 w-full max-w-xs z-40 bg-white mobile-sidebar hidden">
+        <div class="absolute top-0 right-0 -mr-12 pt-2">
+            <button id="close-sidebar-button" class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <span class="sr-only">Close sidebar</span>
+                <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
+            <div class="flex-shrink-0 flex items-center px-4">
+                {% block mobile_title %}{% endblock %}
+            </div>
+            {% block mobile_navigation %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64">
+            <div class="flex flex-col flex-1 min-h-0 bg-white border-r border-gray-200">
+                <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+                    <div class="flex items-center flex-shrink-0 px-4">
+                        {% block desktop_title %}{% endblock %}
+                    </div>
+                    {% block desktop_navigation %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex flex-1 flex-col overflow-hidden">
+        <!-- Top Navigation -->
+        <div class="relative z-10 flex h-16 flex-shrink-0 bg-white shadow">
+            <button id="toggle-sidebar-button" class="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 md:hidden">
+                <span class="sr-only">Open sidebar</span>
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            
+            <div class="flex-1 px-4 flex justify-between">
+                <div class="flex-1 flex">
+                    {% block search %}{% endblock %}
+                </div>
+                <div class="ml-4 flex items-center md:ml-6">
+                    {% block header_actions %}{% endblock %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <main class="flex-1 relative overflow-y-auto focus:outline-none">
+            <div class="py-6">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                    {% block breadcrumbs %}{% endblock %}
+                </div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                    {% block dashboard_header %}{% endblock %}
+                    <div class="py-4">
+                        {% block dashboard_content %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_javascript %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get DOM elements
+    const dashboard = document.getElementById('dashboard');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    const toggleSidebarButton = document.getElementById('toggle-sidebar-button');
+    const closeSidebarButton = document.getElementById('close-sidebar-button');
+
+    // Initialize current section from hash or default to overview
+    let currentSection = window.location.hash ? window.location.hash.substring(1) : 'overview';
+
+    // Toggle sidebar
+    function toggleSidebar() {
+        mobileSidebar.classList.toggle('hidden');
+        mobileSidebar.classList.toggle('visible');
+        sidebarBackdrop.classList.toggle('hidden');
+        sidebarBackdrop.classList.toggle('visible');
+    }
+
+    // Close sidebar
+    function closeSidebar() {
+        mobileSidebar.classList.add('hidden');
+        mobileSidebar.classList.remove('visible');
+        sidebarBackdrop.classList.add('hidden');
+        sidebarBackdrop.classList.remove('visible');
+    }
+
+    // Set active section
+    function setSection(section) {
+        currentSection = section;
+        window.location.hash = section;
+        closeSidebar();
+
+        // Update active states
+        document.querySelectorAll('[data-section]').forEach(el => {
+            const isActive = el.dataset.section === section;
+            if (isActive) {
+                el.classList.add('bg-gray-100', 'text-gray-900');
+                el.classList.remove('text-gray-600', 'hover:bg-gray-50', 'hover:text-gray-900');
+            } else {
+                el.classList.remove('bg-gray-100', 'text-gray-900');
+                el.classList.add('text-gray-600', 'hover:bg-gray-50', 'hover:text-gray-900');
+            }
+        });
+
+        // Show/hide content sections
+        document.querySelectorAll('[data-content-section]').forEach(el => {
+            el.style.display = el.dataset.contentSection === section ? 'block' : 'none';
+        });
+    }
+
+    // Event listeners
+    toggleSidebarButton.addEventListener('click', toggleSidebar);
+    closeSidebarButton.addEventListener('click', closeSidebar);
+    sidebarBackdrop.addEventListener('click', closeSidebar);
+
+    // Handle section changes
+    document.querySelectorAll('[data-section]').forEach(el => {
+        el.addEventListener('click', () => setSection(el.dataset.section));
+    });
+
+    // Set initial section
+    setSection(currentSection);
+});
+</script>
+{% endblock %}
