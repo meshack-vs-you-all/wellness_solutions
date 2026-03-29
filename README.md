@@ -44,7 +44,7 @@ npm run build:wordpress
 Clone the repository and build the theme bundle:
 
 ```bash
-git clone git@github.com:meshack-vs-you-all/wellness_solutions.git
+git clone https://github.com/meshack-vs-you-all/wellness_solutions.git
 cd wellness_solutions/frontend
 npm install
 npm run build:wordpress
@@ -58,12 +58,41 @@ wordpress/wp-content/themes/wellness-solutions/assets/app
 
 ## Local WordPress Wiring
 
-1. Install WordPress on the target machine or VPS.
-2. Copy or mount `wordpress/wp-content/themes/wellness-solutions` into the WordPress `wp-content/themes/` directory.
-3. Activate the `Wellness Solutions` theme.
-4. Create a page that uses the `Wellness App Shell` template if you want the React app rendered inside a standard WordPress page.
-5. Install the booking, auth, and admin plugins you plan to use.
-6. Expose the plugin routes through the expected namespace or update the runtime config in the theme if your namespace differs from `/wp-json/wellness-solutions/v1`.
+This repo now includes a reproducible local stack:
+
+```bash
+cp .env.wordpress.example .env.wordpress
+bash scripts/local-wordpress-up.sh
+```
+
+That script:
+
+1. installs frontend dependencies if needed
+2. builds the WordPress theme bundle
+3. starts MariaDB and WordPress with Docker Compose
+4. bootstraps WordPress through WP-CLI
+5. activates the `Wellness Solutions` theme
+6. creates an app shell page at `/wellness-app/`
+
+Useful commands:
+
+```bash
+bash scripts/local-wordpress-up.sh
+bash scripts/local-wordpress-down.sh
+bash scripts/local-wordpress-reset.sh
+FORCE_FRONTEND_BUILD=1 bash scripts/local-wordpress-up.sh
+```
+
+Default local URLs:
+
+- site: `http://127.0.0.1:8090/`
+- admin: `http://127.0.0.1:8090/wp-admin/`
+- app shell: `http://127.0.0.1:8090/wellness-app/`
+
+Plugin work still remains:
+
+1. Install the booking, auth, and admin plugins you plan to use.
+2. Expose the plugin routes through the expected namespace or update the runtime config in the theme if your namespace differs from `/wp-json/wellness-solutions/v1`.
 
 ## CI And Validation
 
