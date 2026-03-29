@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Reveal } from 'react-kino';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
+import { getPublicAssetUrl } from '../../config/runtime';
 
 interface ClassItem {
   id: number | string;
@@ -34,10 +35,10 @@ export default function ServicesPage() {
   }, []);
 
   const images: Record<string, string> = { 
-    stretch: `${api.defaults.baseURL?.replace('/api', '')}/static/images/personal-training.jpg`, 
-    wellness: `${api.defaults.baseURL?.replace('/api', '')}/static/images/wellness.jpg`, 
-    training: `${api.defaults.baseURL?.replace('/api', '')}/static/images/ergonomics.jpg`,
-    corporate: `${api.defaults.baseURL?.replace('/api', '')}/static/images/team-building.jpg`
+    stretch: getPublicAssetUrl('personal-training.jpg'),
+    wellness: getPublicAssetUrl('wellness.jpg'),
+    training: getPublicAssetUrl('ergonomics.jpg'),
+    corporate: getPublicAssetUrl('team-building.jpg')
   };
 
   return (

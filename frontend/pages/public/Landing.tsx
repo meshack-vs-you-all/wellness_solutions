@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
+import { getPublicAssetUrl } from '../../config/runtime';
 
 interface ServiceItem {
   id: number | string;
@@ -12,8 +13,6 @@ interface ServiceItem {
   price: number;
   type: string;
 }
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
 
 const btnPrimary = { background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))', color: '#fff', padding: '10px 20px', borderRadius: 99, fontWeight: 600, textDecoration: 'none', border: 'none', cursor: 'pointer', display: 'inline-block', textAlign: 'center' as const };
 const btnSecondary = { background: 'rgba(255,255,255,0.08)', color: '#fff', padding: '10px 20px', borderRadius: 99, fontWeight: 600, textDecoration: 'none', border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer', display: 'inline-block', textAlign: 'center' as const, backdropFilter: 'blur(8px)' };
@@ -70,7 +69,7 @@ export default function Landing() {
 
         {/* Hero Section */}
         <Scene duration="100vh" pin={false}>
-          <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '20px', background: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url(${BACKEND_URL}/static/images/wellness-therapy.jpg) center/cover` }}>
+          <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '20px', background: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url(${getPublicAssetUrl('stretch-therapy.jpg')}) center/cover` }}>
             <Reveal animation="fade-up" delay={200}>
               <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 6rem)', margin: 0, fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.1, background: 'linear-gradient(180deg, #fff 0%, #d4d4d8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', maxWidth: '900px' }}>
                 Rejuvenate Your Body,<br />Restore Your Mind
@@ -107,7 +106,7 @@ export default function Landing() {
             </div>
             <div style={{ flex: '1 1 400px', maxWidth: '100%', position: 'relative' }}>
               <Reveal animation="zoom-in" delay={200}>
-                <div style={{ width: '100%', aspectRatio: '4/3', borderRadius: '24px', background: `url(${BACKEND_URL}/static/images/team-building.jpg) center/cover`, boxShadow: '0 20px 60px rgba(0,0,0,0.5)', border: '1px solid #222' }}></div>
+                <div style={{ width: '100%', aspectRatio: '4/3', borderRadius: '24px', background: `url(${getPublicAssetUrl('team-building.jpg')}) center/cover`, boxShadow: '0 20px 60px rgba(0,0,0,0.5)', border: '1px solid #222' }}></div>
               </Reveal>
             </div>
           </div>
@@ -130,9 +129,9 @@ export default function Landing() {
                 </div>
 
                 {[
-                  { title: "Postural & Foot Analysis", desc: "Precision assessment of body alignment and gait to identify the root causes of physical imbalance, discomfort, and movement inefficiency.", at: 0.15, img: `${BACKEND_URL}/static/images/personal-training.jpg` },
-                  { title: "Corrective Exercise Therapy", desc: "Targeted, personalized movement programs that restore functional mobility, correct structural imbalances, and reduce chronic tension and pain.", at: 0.35, img: `${BACKEND_URL}/static/images/wellness.jpg` },
-                  { title: "Injury Prevention & Wellness", desc: "Educational workshops and comprehensive programs covering ergonomics, nutritional guidance, and injury prevention for individuals and organizations.", at: 0.55, img: `${BACKEND_URL}/static/images/ergonomics.jpg` }
+                  { title: "Postural & Foot Analysis", desc: "Precision assessment of body alignment and gait to identify the root causes of physical imbalance, discomfort, and movement inefficiency.", at: 0.15, img: getPublicAssetUrl('personal-training.jpg') },
+                  { title: "Corrective Exercise Therapy", desc: "Targeted, personalized movement programs that restore functional mobility, correct structural imbalances, and reduce chronic tension and pain.", at: 0.35, img: getPublicAssetUrl('wellness.jpg') },
+                  { title: "Injury Prevention & Wellness", desc: "Educational workshops and comprehensive programs covering ergonomics, nutritional guidance, and injury prevention for individuals and organizations.", at: 0.55, img: getPublicAssetUrl('ergonomics.jpg') }
                 ].map((service, i) => (
                   <Reveal key={i} progress={progress} at={service.at} animation="fade-up">
                     <div
@@ -172,10 +171,10 @@ export default function Landing() {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
               {[
-                { name: "White Eskuri Barefoot Shoes", subtitle: "With Yellow Accents", url: "https://eskuribarefoot.africa/products/white-eskuri-barefoot-shoes", img: `${BACKEND_URL}/static/images/personal-training.jpg`, tag: "Featured" },
-                { name: "Black Eskuri Barefoot Shoes", subtitle: "With White Accents", url: "https://eskuribarefoot.africa/products/black-eskuri-barefoot-shoes-with-white-accents", img: `${BACKEND_URL}/static/images/wellness.jpg` },
-                { name: "Moonlight Blue", subtitle: "With White Accents", url: "https://eskuribarefoot.africa/products/moonlight-blue-with-white-accents", img: `${BACKEND_URL}/static/images/biometric-tests.jpg`, tag: "New" },
-                { name: "Khaki / Beige", subtitle: "Eskuri Barefoot Shoes", url: "https://eskuribarefoot.africa/products/khaki-beige-bare-foot-shoes", img: `${BACKEND_URL}/static/images/wellness-therapy.jpg` }
+                { name: "White Eskuri Barefoot Shoes", subtitle: "With Yellow Accents", url: "https://eskuribarefoot.africa/products/white-eskuri-barefoot-shoes", img: getPublicAssetUrl('personal-training.jpg'), tag: "Featured" },
+                { name: "Black Eskuri Barefoot Shoes", subtitle: "With White Accents", url: "https://eskuribarefoot.africa/products/black-eskuri-barefoot-shoes-with-white-accents", img: getPublicAssetUrl('wellness.jpg') },
+                { name: "Moonlight Blue", subtitle: "With White Accents", url: "https://eskuribarefoot.africa/products/moonlight-blue-with-white-accents", img: getPublicAssetUrl('biometric-tests.jpg'), tag: "New" },
+                { name: "Khaki / Beige", subtitle: "Eskuri Barefoot Shoes", url: "https://eskuribarefoot.africa/products/khaki-beige-bare-foot-shoes", img: getPublicAssetUrl('stretch-therapy.jpg') }
               ].map((item, i) => (
                 <Reveal key={i} animation="fade-up" delay={i * 100}>
                   <div style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', border: '1px solid #222', height: '400px', background: `url(${item.img}) center/cover`, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>

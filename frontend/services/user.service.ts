@@ -6,27 +6,24 @@ import type { Class } from '../types/class.types';
 
 // For Admin
 const getAllUsers = async (): Promise<User[]> => {
-  const response = await api.get<User[]>('/api/users/');
+  const response = await api.get<User[]>('/users/');
   return response.data;
 };
 
 const getAnalytics = async (): Promise<AnalyticsData> => {
-  // NOTE: Endpoint '/api/analytics/' is an assumption.
-  const response = await api.get<AnalyticsData>('/api/analytics/');
+  const response = await api.get<AnalyticsData>('/analytics/');
   return response.data;
 };
 
 // For logged-in user
 const getUserBookings = async (): Promise<Booking[]> => {
-  // NOTE: Endpoint '/api/users/me/bookings/' is an assumption.
-  const response = await api.get<Booking[]>('/api/users/me/bookings/');
+  const response = await api.get<Booking[]>('/users/me/bookings/');
   return response.data;
 };
 
 // For Instructor
 const getInstructorClasses = async (): Promise<Class[]> => {
-  // NOTE: Endpoint '/api/instructors/me/classes/' is an assumption.
-  const response = await api.get<Class[]>('/api/instructors/me/classes/');
+  const response = await api.get<Class[]>('/instructors/me/classes/');
   return response.data;
 };
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { NavBar } from './Dashboard';
 import { useAuth } from '../../contexts/AuthContext';
 import api from '../../services/api';
+import { getApiEndpointUrl } from '../../config/runtime';
 
 export default function Profile() {
   const { user } = useAuth();
@@ -29,7 +30,7 @@ export default function Profile() {
 
   const handleSyncCalendar = () => {
     const token = localStorage.getItem('authToken');
-    window.open(`${api.defaults.baseURL?.replace('/api', '')}/api/calendar/export/?token=${token}`, '_blank');
+    window.open(`${getApiEndpointUrl('calendar/export/')}?token=${token ?? ''}`, '_blank');
   };
 
   const inputStyle = {

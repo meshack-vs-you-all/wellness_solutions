@@ -1,6 +1,7 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { runtimeConfig } from './config/runtime';
 
 // Public pages
 import Landing from './pages/public/Landing';
@@ -32,11 +33,13 @@ import AdminUsers from './pages/protected/AdminUsers';
 import AdminClasses from './pages/protected/AdminClasses';
 
 const App: React.FC = () => {
+  const Router = runtimeConfig.routerMode === 'hash' ? HashRouter : BrowserRouter;
+
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <Router basename={runtimeConfig.appBasePath}>
         <AppRoutes />
-      </BrowserRouter>
+      </Router>
     </AuthProvider>
   );
 };

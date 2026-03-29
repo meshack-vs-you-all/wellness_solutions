@@ -1,81 +1,84 @@
-// Use environment variable with fallback for backend base URL (without /api)
-const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:8000';
+import { getPublicAssetUrl, joinUrl, runtimeConfig } from '../config/runtime';
 
-// Static image paths from the Django backend
+// Static image paths from the configured asset host
 export const BACKEND_IMAGES = {
   // Logos
-  LOGO: `${API_BASE_URL}/static/images/logo.png`,
-  LOGO_WHITE: `${API_BASE_URL}/static/images/logo-white.png`,
-  JPF_LOGO: `${API_BASE_URL}/static/images/tr_jpf_logo.png`,
+  LOGO: getPublicAssetUrl('logo.png'),
+  LOGO_WHITE: getPublicAssetUrl('logo-white.png'),
+  JPF_LOGO: getPublicAssetUrl('tr_jpf_logo.png'),
   
   // Service Images
-  STRETCH_THERAPY: `${API_BASE_URL}/static/images/wellness-therapy.jpg`,
-  PERSONAL_TRAINING: `${API_BASE_URL}/static/images/personal-training.jpg`,
-  TEAM_BUILDING: `${API_BASE_URL}/static/images/team-building.jpg`,
-  WELLNESS: `${API_BASE_URL}/static/images/wellness.jpg`,
-  NUTRITION: `${API_BASE_URL}/static/images/nutrition.jpg`,
-  ERGONOMICS: `${API_BASE_URL}/static/images/ergonomics.jpg`,
-  BIOMETRIC_TESTS: `${API_BASE_URL}/static/images/biometric-tests.jpg`,
-  SERVICE_PLACEHOLDER: `${API_BASE_URL}/static/images/service-placeholder.jpg`,
+  STRETCH_THERAPY: getPublicAssetUrl('stretch-therapy.jpg'),
+  PERSONAL_TRAINING: getPublicAssetUrl('personal-training.jpg'),
+  TEAM_BUILDING: getPublicAssetUrl('team-building.jpg'),
+  WELLNESS: getPublicAssetUrl('wellness.jpg'),
+  NUTRITION: getPublicAssetUrl('nutrition.jpg'),
+  ERGONOMICS: getPublicAssetUrl('ergonomics.jpg'),
+  BIOMETRIC_TESTS: getPublicAssetUrl('biometric-tests.jpg'),
+  SERVICE_PLACEHOLDER: getPublicAssetUrl('service-placeholder.jpg'),
   
   // Hero/About Images
-  ABOUT_HERO: `${API_BASE_URL}/static/images/about-hero.jpg`,
-  IMG_9748: `${API_BASE_URL}/static/images/IMG_9748.jpg`,
-  HERO_IMAGE: `${API_BASE_URL}/static/images/0D0A0003.JPG`,
+  ABOUT_HERO: getPublicAssetUrl('about-hero.jpg'),
+  IMG_9748: getPublicAssetUrl('IMG_9748.jpg'),
+  HERO_IMAGE: getPublicAssetUrl('0D0A0003.JPG'),
   
   // Team Images
-  TEAM_1: `${API_BASE_URL}/static/images/team/team-1.jpg`,
-  TEAM_2: `${API_BASE_URL}/static/images/team/team-2.jpg`,
-  TEAM_3: `${API_BASE_URL}/static/images/team/team-3.jpg`,
+  TEAM_1: getPublicAssetUrl('team/team-1.jpg'),
+  TEAM_2: getPublicAssetUrl('team/team-2.jpg'),
+  TEAM_3: getPublicAssetUrl('team/team-3.jpg'),
   
   // Testimonial Images
-  TESTIMONIAL_1: `${API_BASE_URL}/static/images/testimonial1.jpg`,
-  TESTIMONIAL_2: `${API_BASE_URL}/static/images/testimonial2.jpg`,
-  TESTIMONIAL_3: `${API_BASE_URL}/static/images/testimonial3.jpg`,
+  TESTIMONIAL_1: getPublicAssetUrl('testimonial1.jpg'),
+  TESTIMONIAL_2: getPublicAssetUrl('testimonial2.jpg'),
+  TESTIMONIAL_3: getPublicAssetUrl('testimonial3.jpg'),
   
   // Icons
-  DEFAULT_AVATAR: `${API_BASE_URL}/static/images/default-avatar.svg`,
-  FINANCE_ICON: `${API_BASE_URL}/static/images/finance-icon.svg`,
-  HEALTHCARE_ICON: `${API_BASE_URL}/static/images/healthcare-icon.svg`,
-  INTERNATIONAL_ICON: `${API_BASE_URL}/static/images/international-icon.svg`,
+  DEFAULT_AVATAR: getPublicAssetUrl('default-avatar.svg'),
+  FINANCE_ICON: getPublicAssetUrl('finance-icon.svg'),
+  HEALTHCARE_ICON: getPublicAssetUrl('healthcare-icon.svg'),
+  INTERNATIONAL_ICON: getPublicAssetUrl('international-icon.svg'),
   
   // Client Logos
   CLIENTS: {
-    LOGO_1: `${API_BASE_URL}/static/images/clients/logo1.png`,
-    LOGO_2: `${API_BASE_URL}/static/images/clients/logo2.png`,
-    LOGO_3: `${API_BASE_URL}/static/images/clients/logo3.png`,
-    LOGO_4: `${API_BASE_URL}/static/images/clients/logo4.png`,
-    LOGO_5: `${API_BASE_URL}/static/images/clients/logo5.png`,
-    LOGO_6: `${API_BASE_URL}/static/images/clients/logo6.png`,
-    LOGO_7: `${API_BASE_URL}/static/images/clients/logo7.png`,
-    LOGO_8: `${API_BASE_URL}/static/images/clients/logo8.png`,
-    AON: `${API_BASE_URL}/static/images/clients/aon.png`,
-    SWEDISH: `${API_BASE_URL}/static/images/clients/swedish.png`,
-    KARURA: `${API_BASE_URL}/static/images/clients/karura.png`,
-    WORLDBANK: `${API_BASE_URL}/static/images/clients/worldbank.svg`,
-    GERTRUDES: `${API_BASE_URL}/static/images/clients/gertrudes.png`,
-    TNS: `${API_BASE_URL}/static/images/clients/tns.png`,
-    HEALTHCARE_ICON: `${API_BASE_URL}/static/images/clients/healthcare-icon.svg`,
-    FINANCE_ICON: `${API_BASE_URL}/static/images/clients/finance-icon.svg`,
-    PLACEHOLDER_LOGO: `${API_BASE_URL}/static/images/clients/placeholder-logo.png`,
+    LOGO_1: getPublicAssetUrl('clients/logo1.png'),
+    LOGO_2: getPublicAssetUrl('clients/logo2.png'),
+    LOGO_3: getPublicAssetUrl('clients/logo3.png'),
+    LOGO_4: getPublicAssetUrl('clients/logo4.png'),
+    LOGO_5: getPublicAssetUrl('clients/logo5.png'),
+    LOGO_6: getPublicAssetUrl('clients/logo6.png'),
+    LOGO_7: getPublicAssetUrl('clients/logo7.png'),
+    LOGO_8: getPublicAssetUrl('clients/logo8.png'),
+    AON: getPublicAssetUrl('clients/aon.png'),
+    SWEDISH: getPublicAssetUrl('clients/swedish.png'),
+    KARURA: getPublicAssetUrl('clients/karura.png'),
+    WORLDBANK: getPublicAssetUrl('clients/worldbank.svg'),
+    GERTRUDES: getPublicAssetUrl('clients/gertrudes.png'),
+    TNS: getPublicAssetUrl('clients/tns.png'),
+    HEALTHCARE_ICON: getPublicAssetUrl('clients/healthcare-icon.svg'),
+    FINANCE_ICON: getPublicAssetUrl('clients/finance-icon.svg'),
+    PLACEHOLDER_LOGO: getPublicAssetUrl('clients/placeholder-logo.png'),
   }
 };
 
-// Utility function to get backend image URL
+// Utility function to get an image URL from the configured asset host.
 export const getBackendImageUrl = (imagePath: string): string => {
   if (imagePath.startsWith('http')) {
     return imagePath;
   }
-  return `${API_BASE_URL}/static/images/${imagePath}`;
+  return getPublicAssetUrl(imagePath);
 };
 
-// Utility function for media files (user uploads)
+// Utility function for media files (user uploads).
 export const getMediaUrl = (mediaPath: string): string => {
   if (!mediaPath) return BACKEND_IMAGES.DEFAULT_AVATAR;
   if (mediaPath.startsWith('http')) {
     return mediaPath;
   }
-  return `${API_BASE_URL}/media/${mediaPath}`;
+  if (!runtimeConfig.mediaBaseUrl) {
+    return getPublicAssetUrl(mediaPath.replace(/^\/+/g, ''));
+  }
+
+  return joinUrl(runtimeConfig.mediaBaseUrl, mediaPath);
 };
 
 // Service type to image mapping

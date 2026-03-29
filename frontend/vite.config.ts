@@ -3,23 +3,31 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', 'VITE_');
-    return {
-      plugins: [react()],
-      define: {
-        // Only expose VITE_ prefixed variables to the client
-        // This prevents accidental exposure of sensitive data
+  const env = loadEnv(mode, '.', 'VITE_');
+  const isWordPressBuild = mode === 'wordpress';
+
+  return {
+    plugins: [react()],
+    base: env.VITE_APP_BASE || (isWordPressBuild ? './' : '/'),
+    build: {
+      outDir:
+        env.VITE_BUILD_OUT_DIR ||
+        (isWordPressBuild
+          ? '../wordpress/wp-content/themes/wellness-solutions/assets/app'
+          : 'dist'),
+      emptyOutDir: true,
+      manifest: isWordPressBuild,
+    },
+    server: {
+      host: true,
+      port: 5173,
+      open: !isWordPressBuild,
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, '.'),
       },
-      server: {
-        host: true, // Allow access from network devices
-        port: 5173,
-        open: true,
-      },
-      resolve: {
-        alias: {
-          '@': path.resolve(__dirname, '.'),
-        },
-        extensions: ['.ts', '.tsx', '.js', '.jsx'],
-      }
-    };
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    },
+  };
 });

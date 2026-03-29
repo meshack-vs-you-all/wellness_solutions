@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { NavBar } from './Dashboard';
 import { useAuth } from '../../contexts/AuthContext';
 import api from '../../services/api';
+import { getApiEndpointUrl } from '../../config/runtime';
 
 interface AnalyticsData {
   totalUsers: number;
@@ -87,13 +88,13 @@ export default function AdminDashboard() {
                   </button>
                   <button onClick={() => {
                     const token = localStorage.getItem('authToken');
-                    window.open(`${api.defaults.baseURL?.replace('/api', '')}/api/admin/users/export/csv/?token=${token}`, '_blank');
+                    window.open(`${getApiEndpointUrl('admin/users/export/csv/')}?token=${token ?? ''}`, '_blank');
                   }} style={{ background: 'rgba(59,130,246,0.1)', color: '#3b82f6', border: '1px solid rgba(59,130,246,0.2)', padding: '12px', borderRadius: 12, cursor: 'pointer', fontWeight: 600, textAlign: 'left' }}>
                     📊 Export User Directory (CSV)
                   </button>
                   <button onClick={() => {
                     const token = localStorage.getItem('authToken');
-                    window.open(`${api.defaults.baseURL?.replace('/api', '')}/api/calendar/export/?token=${token}`, '_blank');
+                    window.open(`${getApiEndpointUrl('calendar/export/')}?token=${token ?? ''}`, '_blank');
                   }} style={{ background: 'rgba(139,92,246,0.1)', color: '#8b5cf6', border: '1px solid rgba(139,92,246,0.2)', padding: '12px', borderRadius: 12, cursor: 'pointer', fontWeight: 600, textAlign: 'left' }}>
                     📅 Sync Master Calendar (iCal)
                   </button>

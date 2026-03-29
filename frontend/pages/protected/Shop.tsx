@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { NavBar } from './Dashboard';
 import api from '../../services/api';
+import { getPublicAssetUrl } from '../../config/runtime';
 
 interface Product {
   id: string | number;
@@ -16,6 +18,7 @@ const categoryColors: Record<string, string> = { package: 'var(--brand-primary)'
 const categoryIcons: Record<string, string> = { package: '🧘', gear: '🏋️', apparel: '👕', bundle: '🎁', all: '🛍️' };
 
 export default function Shop() {
+  const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>(['all']);
   const [activeCategory, setActiveCategory] = useState('all');
@@ -139,7 +142,7 @@ export default function Shop() {
                     setCart({});
                     setCartOpen(false);
                     setCheckoutStep('cart');
-                    window.location.href = '/booking';
+                    navigate('/booking');
                   }}
                   style={{ background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))', color: '#fff', border: 'none', padding: '12px 32px', borderRadius: 12, fontWeight: 700, cursor: 'pointer' }}
                 >
@@ -180,7 +183,7 @@ export default function Shop() {
             {filtered.map(product => {
               const imagePath = (product as any).image;
               const fullImageUrl = imagePath && imagePath.startsWith('/static/')
-                ? `${api.defaults.baseURL?.replace('/api', '')}${imagePath}`
+                ? getPublicAssetUrl(imagePath.replace(/^\/static\/images\//, ''))
                 : imagePath;
 
               return (

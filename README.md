@@ -1,97 +1,79 @@
 # Wellness Solutions
 
-A comprehensive web application for bookings, payments, and user management at a stretching and fitness studio.
+This repository now contains a WordPress-ready theme shell plus the retained React frontend that mounts inside it.
 
-[![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+## Current State
 
-License: MIT
+- `frontend/` contains the retained Vite React app and design/reference UI.
+- `wordpress/wp-content/themes/wellness-solutions/` contains the WordPress theme shell that enqueues the built frontend.
+- `DEMO_MASTER_GUIDE.pdf` is kept as a demo/reference document.
+- The previous Django backend, SQLite database, Celery logs, Docker backend files, and Django templates have been removed from the working tree.
 
-## Settings
+## What Is Not Done Yet
 
-Moved to [settings](https://cookiecutter-django.readthedocs.io/en/latest/1-getting-started/settings.html).
+- Authentication, bookings, dashboards, and admin flows still depend on the WordPress plugins/endpoints you install.
+- You will need to map the plugin routes to the app's configured REST namespace if they differ.
 
-## Basic Commands
+## WordPress Theme
 
-### Setting Up Your Users
-
-- To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
-
-- To create a **superuser account**, use this command:
-
-      $ python manage.py createsuperuser
-
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
-
-### Type checks
-
-Running type checks with mypy:
-
-    $ mypy wellness_solutions
-
-### Test coverage
-
-To run the tests, check your test coverage, and generate an HTML coverage report:
-
-    $ coverage run -m pytest
-    $ coverage html
-    $ open htmlcov/index.html
-
-#### Running tests with pytest
-
-    $ pytest
-
-### Live reloading and Sass CSS compilation
-
-Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readthedocs.io/en/latest/2-local-development/developing-locally.html#using-webpack-or-gulp).
-
-### Celery
-
-This app comes with Celery.
-
-To run a celery worker:
+The theme lives at:
 
 ```bash
-cd wellness_solutions
-celery -A config.celery_app worker -l info
+wordpress/wp-content/themes/wellness-solutions
 ```
 
-Please note: For Celery's import magic to work, it is important _where_ the celery commands are run. If you are in the same folder with _manage.py_, you should be right.
-
-To run [periodic tasks](https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html), you'll need to start the celery beat scheduler service. You can start it as a standalone process:
+The React app builds into:
 
 ```bash
-cd wellness_solutions
-celery -A config.celery_app beat
+wordpress/wp-content/themes/wellness-solutions/assets/app
 ```
 
-or you can embed the beat service inside a worker with the `-B` option (not recommended for production use):
+## Frontend
+
+Run the frontend locally:
 
 ```bash
-cd wellness_solutions
-celery -A config.celery_app worker -B -l info
+cd frontend
+npm install
+npm run dev
+npm run build:wordpress
 ```
 
-### Email Server
+## Reproduce On Another Machine
 
-In development, it is often nice to be able to see emails that are being sent from your application. For that reason local SMTP server [Mailpit](https://github.com/axllent/mailpit) with a web interface is available as docker container.
+Clone the repository and build the theme bundle:
 
-Container mailpit will start automatically when you will run all docker containers.
-Please check [cookiecutter-django Docker documentation](https://cookiecutter-django.readthedocs.io/en/latest/2-local-development/developing-locally-docker.html) for more details how to start all containers.
+```bash
+git clone git@github.com:meshack-vs-you-all/wellness_solutions.git
+cd wellness_solutions/frontend
+npm install
+npm run build:wordpress
+```
 
-With Mailpit running, to view messages that are sent by your application, open your browser and go to `http://127.0.0.1:8025`
+This produces the frontend assets inside:
 
-### Sentry
+```bash
+wordpress/wp-content/themes/wellness-solutions/assets/app
+```
 
-Sentry is an error logging aggregator service. You can sign up for a free account at <https://sentry.io/signup/?code=cookiecutter> or download and host it yourself.
-The system is set up with reasonable defaults, including 404 logging and integration with the WSGI application.
+## Local WordPress Wiring
 
-You must set the DSN url in production.
+1. Install WordPress on the target machine or VPS.
+2. Copy or mount `wordpress/wp-content/themes/wellness-solutions` into the WordPress `wp-content/themes/` directory.
+3. Activate the `Wellness Solutions` theme.
+4. Create a page that uses the `Wellness App Shell` template if you want the React app rendered inside a standard WordPress page.
+5. Install the booking, auth, and admin plugins you plan to use.
+6. Expose the plugin routes through the expected namespace or update the runtime config in the theme if your namespace differs from `/wp-json/wellness-solutions/v1`.
 
-## Deployment
+## CI And Validation
 
-The following details how to deploy this application.
+- GitHub Actions now validates the current stack in `.github/workflows/predeploy.yml`.
+- The workflow runs `npm ci`, `npm exec tsc --noEmit`, `npm run build:wordpress`, checks for the generated Vite manifest, and lints the theme PHP files.
+- Built assets are intentionally ignored from Git. Another machine must run the frontend build step before activating the theme.
 
-### Docker
+## Next Step
 
-See detailed [cookiecutter-django Docker documentation](https://cookiecutter-django.readthedocs.io/en/latest/3-deployment/deployment-with-docker.html).
+1. Install your WordPress plugins.
+2. Point the app at the plugin REST namespace if it is not `/wp-json/wellness-solutions/v1`.
+3. Build the frontend into the theme with `npm run build:wordpress`.
+4. Activate the `Wellness Solutions` theme or use the `Wellness App Shell` page template.

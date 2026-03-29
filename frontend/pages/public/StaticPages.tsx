@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Reveal } from 'react-kino';
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+import { getPublicAssetUrl } from '../../config/runtime';
 
 const PageHeader = ({ title }: { title: string }) => (
   <header style={{ padding: '20px 24px', borderBottom: '1px solid #1a1a1a', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, background: 'rgba(18,18,18,0.8)', backdropFilter: 'blur(10px)', zIndex: 10 }}>
@@ -58,7 +57,7 @@ export function Blog() {
       date: "Oct 12, 2026",
       readTime: "4 min read",
       slug: "stretches-for-runners-knee",
-      img: `${BACKEND_URL}/static/images/personal-training.jpg`
+      img: getPublicAssetUrl('personal-training.jpg')
     },
     {
       title: "Why Mobility Matters as You Age",
@@ -67,7 +66,7 @@ export function Blog() {
       date: "Oct 05, 2026",
       readTime: "6 min read",
       slug: "flexibility-beats-aging",
-      img: `${BACKEND_URL}/static/images/wellness.jpg`
+      img: getPublicAssetUrl('wellness.jpg')
     },
     {
       title: "The Ultimate Post-Workout Recovery Routine",
@@ -76,7 +75,7 @@ export function Blog() {
       date: "Sep 28, 2026",
       readTime: "5 min read",
       slug: "morning-stretch-routine",
-      img: `${BACKEND_URL}/static/images/ergonomics.jpg`
+      img: getPublicAssetUrl('ergonomics.jpg')
     },
     {
       title: "Corporate Wellness: Reducing Desk Slouch",
@@ -85,7 +84,7 @@ export function Blog() {
       date: "Sep 15, 2026",
       readTime: "7 min read",
       slug: "corporate-wellness-roi",
-      img: `${BACKEND_URL}/static/images/team-building.jpg`
+      img: getPublicAssetUrl('team-building.jpg')
     }
   ];
 
@@ -188,7 +187,7 @@ export function BlogPost() {
           <Reveal animation="fade-up" delay={200}>
             <div style={{ padding: '60px 0', borderTop: '1px solid #111' }}>
               <p style={{ fontSize: '1.2rem', lineHeight: 1.8, color: '#d4d4d8', marginBottom: 32 }}>
-                Placeholder content for <strong>{postInfo.title}</strong>. In a fully connected application, this dynamic route (`/blog/:slug`) would fetch the markdown or rich text payload directly from the Django backend API.
+                Placeholder content for <strong>{postInfo.title}</strong>. In a fully connected application, this dynamic route (`/blog/:slug`) would fetch the markdown or rich text payload from the CMS/API layer.
               </p>
               <h3 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '40px 0 16px' }}>The Science Behind It</h3>
               <p style={{ fontSize: '1.1rem', lineHeight: 1.8, color: '#888', marginBottom: 24 }}>
