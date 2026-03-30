@@ -39,9 +39,15 @@ bash scripts/local-wordpress-up.sh
 - Built assets under `wordpress/wp-content/themes/wellness-solutions/assets/app`
 - `frontend/node_modules`
 
-## Source Files
+## Reference Files
 
-- Proposal: `Jaffet-Platform-Proposal-Final.pdf`
-- Workbook: `WSK_Knowledge_Base.xlsx`
-- Notebook summary: `WSK_NotebookLM.docx`
-- Input values: `WORDPRESS_SETUP_DATA.md`
+Versioned in GitHub:
+
+- `WORDPRESS_SETUP_DATA.md`
+- `WORK_PC_SETUP.md`
+
+Client source documents currently local-only on this machine unless you push them with working Git credentials:
+
+- `Jaffet-Platform-Proposal-Final.pdf`
+- `WSK_Knowledge_Base.xlsx`
+- `WSK_NotebookLM.docx`
