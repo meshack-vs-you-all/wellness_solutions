@@ -35,6 +35,9 @@ db.sqlite3-journal
 media/
 staticfiles/
 .env.wordpress
+CES-Client-Financials.pdf
+CES-Transport-Logistics-Financials.pdf
+Copy of CES-Client-Financials.pdf
 
 # Node
 node_modules/

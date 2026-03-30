@@ -69,8 +69,8 @@ That script:
 
 1. installs frontend dependencies if needed
 2. builds the WordPress theme bundle
-3. starts MariaDB and WordPress with Docker Compose
-4. bootstraps WordPress through WP-CLI
+3. starts MySQL and WordPress with Docker Compose
+4. bootstraps WordPress from inside the running container
 5. activates the `Wellness Solutions` theme
 6. creates an app shell page at `/wellness-app/`
 

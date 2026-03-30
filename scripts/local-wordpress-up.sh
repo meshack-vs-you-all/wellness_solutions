@@ -32,48 +32,28 @@ fi
 
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" up -d db wordpress
 
+WORDPRESS_EXEC=(
+  docker compose
+  --env-file "$ENV_FILE"
+  -f "$COMPOSE_FILE"
+  exec
+  wordpress
+)
+
 for _ in {1..60}; do
-  if curl -fsS "$WORDPRESS_SITE_URL/wp-login.php" >/dev/null 2>&1; then
+  if "${WORDPRESS_EXEC[@]}" sh -lc "curl -fsS http://127.0.0.1/wp-login.php >/dev/null" >/dev/null 2>&1; then
     break
   fi
   sleep 2
 done
 
-if ! docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm wp-cli core is-installed >/dev/null 2>&1; then
-  docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm wp-cli core install \
-    --url="$WORDPRESS_SITE_URL" \
-    --title="$WORDPRESS_SITE_TITLE" \
-    --admin_user="$WORDPRESS_ADMIN_USER" \
-    --admin_password="$WORDPRESS_ADMIN_PASSWORD" \
-    --admin_email="$WORDPRESS_ADMIN_EMAIL" \
-    --skip-email
-fi
-
-docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm wp-cli rewrite structure '/%postname%/' --hard >/dev/null
-docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm wp-cli theme activate wellness-solutions >/dev/null
-
-APP_PAGE_ID="$(
-  docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm wp-cli post list \
-    --post_type=page \
-    --name=wellness-app \
-    --field=ID 2>/dev/null | tr -d '\r'
-)"
-
-if [[ -z "$APP_PAGE_ID" ]]; then
-  APP_PAGE_ID="$(
-    docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm wp-cli post create \
-      --post_type=page \
-      --post_status=publish \
-      --post_title='Wellness App' \
-      --post_name='wellness-app' \
-      --porcelain | tr -d '\r'
-  )"
-fi
-
-docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" run --rm wp-cli post meta update \
-  "$APP_PAGE_ID" \
-  _wp_page_template \
-  page-app-shell.php >/dev/null
+"${WORDPRESS_EXEC[@]}" \
+  env \
+  WORDPRESS_SITE_TITLE="$WORDPRESS_SITE_TITLE" \
+  WORDPRESS_ADMIN_USER="$WORDPRESS_ADMIN_USER" \
+  WORDPRESS_ADMIN_PASSWORD="$WORDPRESS_ADMIN_PASSWORD" \
+  WORDPRESS_ADMIN_EMAIL="$WORDPRESS_ADMIN_EMAIL" \
+  php /workspace-scripts/local-wordpress-bootstrap.php >/dev/null
 
 echo "WordPress site: $WORDPRESS_SITE_URL"
 echo "WordPress admin: $WORDPRESS_SITE_URL/wp-admin/"
