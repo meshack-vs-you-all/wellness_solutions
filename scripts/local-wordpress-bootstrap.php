@@ -33,39 +33,58 @@ global $wp_rewrite;
 $wp_rewrite->set_permalink_structure('/%postname%/');
 flush_rewrite_rules();
 
-$page = get_page_by_path('wellness-app');
-$pageId = $page ? (int) $page->ID : 0;
+function ensure_page(string $slug, string $title, string $template = ''): int
+{
+    $page = get_page_by_path($slug);
+    $pageId = $page ? (int) $page->ID : 0;
 
-if ($pageId === 0) {
-    $pageId = wp_insert_post(
-        [
-            'post_type' => 'page',
-            'post_status' => 'publish',
-            'post_title' => 'Wellness App',
-            'post_name' => 'wellness-app',
-        ],
-        true
-    );
+    if ($pageId === 0) {
+        $pageId = wp_insert_post(
+            [
+                'post_type' => 'page',
+                'post_status' => 'publish',
+                'post_title' => $title,
+                'post_name' => $slug,
+            ],
+            true
+        );
 
-    if (is_wp_error($pageId)) {
-        fwrite(STDERR, $pageId->get_error_message() . "\n");
-        exit(1);
+        if (is_wp_error($pageId)) {
+            fwrite(STDERR, $pageId->get_error_message() . "\n");
+            exit(1);
+        }
+    } else {
+        $updateResult = wp_update_post(
+            [
+                'ID' => $pageId,
+                'post_status' => 'publish',
+                'post_title' => $title,
+                'post_name' => $slug,
+            ],
+            true
+        );
+
+        if (is_wp_error($updateResult)) {
+            fwrite(STDERR, $updateResult->get_error_message() . "\n");
+            exit(1);
+        }
     }
-} else {
-    $updateResult = wp_update_post(
-        [
-            'ID' => $pageId,
-            'post_status' => 'publish',
-            'post_title' => 'Wellness App',
-            'post_name' => 'wellness-app',
-        ],
-        true
-    );
 
-    if (is_wp_error($updateResult)) {
-        fwrite(STDERR, $updateResult->get_error_message() . "\n");
-        exit(1);
+    if ($template !== '') {
+        update_post_meta($pageId, '_wp_page_template', $template);
     }
+
+    return $pageId;
 }
 
-update_post_meta($pageId, '_wp_page_template', 'page-app-shell.php');
+// Core React shell entrypoints. These slugs can map to different app routes (hash router)
+// while still being distinct WordPress pages for SEO, navigation, and permissions.
+$shellTemplate = 'page-app-shell.php';
+ensure_page('wellness-app', 'Wellness App', $shellTemplate);
+ensure_page('login', 'Login', $shellTemplate);
+ensure_page('join', 'Join / Sign up', $shellTemplate);
+ensure_page('dashboard', 'Member Dashboard', $shellTemplate);
+ensure_page('programmes', 'Corrective Programmes', $shellTemplate);
+ensure_page('membership', 'Membership', $shellTemplate);
+ensure_page('book', 'Book a Session', $shellTemplate);
+ensure_page('movement-diagnostic', 'Movement Diagnostic', $shellTemplate);

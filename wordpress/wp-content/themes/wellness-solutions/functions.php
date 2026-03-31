@@ -139,3 +139,73 @@ function wellness_solutions_enqueue_theme_app(): void
     wp_add_inline_script('wellness-solutions-app', 'window.WellnessSolutionsConfig = ' . $runtime_json . ';', 'before');
 }
 add_action('wp_enqueue_scripts', 'wellness_solutions_enqueue_theme_app');
+
+function wellness_solutions_register_rest_routes(): void
+{
+    register_rest_route(
+        'wellness-solutions/v1',
+        '/health',
+        array(
+            'methods' => WP_REST_Server::READABLE,
+            'permission_callback' => '__return_true',
+            'callback' => static function (): WP_REST_Response {
+                return new WP_REST_Response(
+                    array(
+                        'ok' => true,
+                        'service' => 'wellness-solutions',
+                        'timestamp' => time(),
+                    ),
+                    200
+                );
+            },
+        )
+    );
+
+    register_rest_route(
+        'wellness-solutions/v1',
+        '/config',
+        array(
+            'methods' => WP_REST_Server::READABLE,
+            'permission_callback' => '__return_true',
+            'callback' => static function (): WP_REST_Response {
+                return new WP_REST_Response(
+                    array(
+                        'restNamespace' => 'wellness-solutions/v1',
+                        'restBaseUrl' => esc_url_raw(rest_url('wellness-solutions/v1')),
+                        'siteUrl' => esc_url_raw(home_url('/')),
+                        'themeUrl' => esc_url_raw(get_stylesheet_directory_uri()),
+                    ),
+                    200
+                );
+            },
+        )
+    );
+
+    register_rest_route(
+        'wellness-solutions/v1',
+        '/me',
+        array(
+            'methods' => WP_REST_Server::READABLE,
+            'permission_callback' => static function (): bool {
+                return is_user_logged_in();
+            },
+            'callback' => static function (): WP_REST_Response {
+                $user = wp_get_current_user();
+                if (!$user || !$user->exists()) {
+                    return new WP_REST_Response(array('error' => 'not_authenticated'), 401);
+                }
+
+                return new WP_REST_Response(
+                    array(
+                        'id' => (int) $user->ID,
+                        'email' => (string) $user->user_email,
+                        'displayName' => (string) $user->display_name,
+                        'roles' => array_values((array) $user->roles),
+                    ),
+                    200
+                );
+            },
+        )
+    );
+}
+add_action('rest_api_init', 'wellness_solutions_register_rest_routes');
