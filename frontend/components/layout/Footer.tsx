@@ -24,6 +24,11 @@ const Footer: React.FC = () => {
               <li><Link to="/schedule" className="text-gray-300 hover:text-secondary transition-colors">Schedule</Link></li>
               <li><Link to="/pricing" className="text-gray-300 hover:text-secondary transition-colors">Pricing</Link></li>
               <li><Link to="/about" className="text-gray-300 hover:text-secondary transition-colors">About Us</Link></li>
+              <li><Link to="/privacy" className="text-gray-300 hover:text-secondary transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms" className="text-gray-300 hover:text-secondary transition-colors">Terms of Service</Link></li>
+              <li><Link to="/cookie-policy" className="text-gray-300 hover:text-secondary transition-colors">Cookie Policy</Link></li>
+              <li><Link to="/refund-policy" className="text-gray-300 hover:text-secondary transition-colors">Refund Policy</Link></li>
+              <li><Link to="/accessibility" className="text-gray-300 hover:text-secondary transition-colors">Accessibility</Link></li>
               <li>
                 <a
                   href="https://eskuribarefoot.africa"

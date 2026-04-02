@@ -262,3 +262,108 @@ export function Contact() {
     </div>
   );
 }
+
+export function Terms() {
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--soft-dark)', color: '#fff', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      <PageHeader title="Terms of Service" />
+      <div style={{ maxWidth: 900, margin: '0 auto', padding: '80px 20px' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 8px' }}>Terms of Service</h1>
+        <p style={{ color: '#888', marginBottom: 48 }}>Last updated: March 2026</p>
+
+        {[
+          { title: 'Use of Services', text: 'Wellness Solutions provides wellness, stretching, and fitness programs. You agree to follow staff instructions and to use services responsibly.' },
+          { title: 'Health Disclaimer', text: 'Our services are not a substitute for medical advice. Consult a healthcare professional before starting any programme, especially if you have injuries or conditions.' },
+          { title: 'Payments & Subscriptions', text: 'All payments are processed through third-party payment providers. Subscription access and entitlements may depend on successful payment confirmation.' },
+          { title: 'Bookings & Cancellations', text: 'Bookings are subject to availability. Cancellation rules may apply and may vary by programme or event type.' },
+          { title: 'Intellectual Property', text: 'Content delivered through programmes (including video libraries and materials) is for member use only.' },
+          { title: 'Limitation of Liability', text: 'To the maximum extent permitted by law, Wellness Solutions is not liable for indirect or consequential damages.' },
+          { title: 'Changes to Terms', text: 'We may update these Terms periodically. Continued use of services indicates acceptance of updated terms.' },
+        ].map(({ title, text }) => (
+          <div key={title} style={{ marginBottom: 40 }}>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: 12, color: '#e4e4e7' }}>{title}</h2>
+            <p style={{ color: '#888', lineHeight: 1.8 }}>{text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function RefundPolicy() {
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--soft-dark)', color: '#fff', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      <PageHeader title="Refund Policy" />
+      <div style={{ maxWidth: 900, margin: '0 auto', padding: '80px 20px' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 8px' }}>Refund Policy</h1>
+        <p style={{ color: '#888', marginBottom: 48 }}>Last updated: March 2026</p>
+
+        <div style={{ marginBottom: 40 }}>
+          <p style={{ color: '#888', lineHeight: 1.8 }}>
+            Refunds depend on the payment method, programme type, and timing of cancellations. Where applicable, we will follow the refund capabilities of our payment processor and programme delivery partners.
+          </p>
+        </div>
+
+        {[
+          { title: 'Memberships', text: 'Membership refunds are handled according to the membership product rules and payment provider confirmations.' },
+          { title: 'One-Off Sessions', text: 'Individual booking refunds may be offered if cancelled within the applicable cancellation window.' },
+          { title: 'Chargebacks', text: 'Chargebacks should be avoided where possible. If a dispute occurs, we will work with the payment provider to reconcile access and delivery.' },
+          { title: 'Contact', text: 'For refund requests, contact our support team and include your booking or order reference.' },
+        ].map(({ title, text }) => (
+          <div key={title} style={{ marginBottom: 40 }}>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: 12, color: '#e4e4e7' }}>{title}</h2>
+            <p style={{ color: '#888', lineHeight: 1.8 }}>{text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function CookiePolicy() {
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--soft-dark)', color: '#fff', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      <PageHeader title="Cookie Policy" />
+      <div style={{ maxWidth: 900, margin: '0 auto', padding: '80px 20px' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 8px' }}>Cookie Policy</h1>
+        <p style={{ color: '#888', marginBottom: 48 }}>Last updated: March 2026</p>
+
+        {[
+          { title: 'What Are Cookies?', text: 'Cookies are small text files stored on your device to help websites function and remember preferences.' },
+          { title: 'How We Use Cookies', text: 'We may use cookies for essential site functionality, analytics, and marketing performance.' },
+          { title: 'Third-Party Cookies', text: 'If you use embedded services (such as booking widgets and analytics), those providers may set their own cookies.' },
+          { title: 'Your Choices', text: 'You can manage cookies through your browser settings. Disabling cookies may affect certain website features.' },
+          { title: 'Contact', text: 'If you have questions about cookies, contact our support team.' },
+        ].map(({ title, text }) => (
+          <div key={title} style={{ marginBottom: 40 }}>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: 12, color: '#e4e4e7' }}>{title}</h2>
+            <p style={{ color: '#888', lineHeight: 1.8 }}>{text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function AccessibilityPolicy() {
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--soft-dark)', color: '#fff', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      <PageHeader title="Accessibility" />
+      <div style={{ maxWidth: 900, margin: '0 auto', padding: '80px 20px' }}>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 8px' }}>Accessibility Statement</h1>
+        <p style={{ color: '#888', marginBottom: 48 }}>Last updated: March 2026</p>
+
+        {[
+          { title: 'Our Commitment', text: 'Wellness Solutions is committed to making our website accessible to everyone, including people with disabilities.' },
+          { title: 'Ongoing Efforts', text: 'We continuously improve our accessibility practices, test with assistive technologies, and address issues as they are reported.' },
+          { title: 'Reporting Accessibility Issues', text: 'If you experience an accessibility barrier, contact us and we will respond to your request.' },
+        ].map(({ title, text }) => (
+          <div key={title} style={{ marginBottom: 40 }}>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: 12, color: '#e4e4e7' }}>{title}</h2>
+            <p style={{ color: '#888', lineHeight: 1.8 }}>{text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

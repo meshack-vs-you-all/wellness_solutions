@@ -105,8 +105,65 @@ export default function Landing() {
               </Reveal>
             </div>
             <div style={{ flex: '1 1 400px', maxWidth: '100%', position: 'relative' }}>
-              <Reveal animation="zoom-in" delay={200}>
+              <Reveal animation="scale" delay={200}>
                 <div style={{ width: '100%', aspectRatio: '4/3', borderRadius: '24px', background: `url(${getPublicAssetUrl('team-building.jpg')}) center/cover`, boxShadow: '0 20px 60px rgba(0,0,0,0.5)', border: '1px solid #222' }}></div>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+
+        {/* Book Your Next Presentation */}
+        <section style={{ padding: '90px 20px', background: '#070707', borderTop: '1px solid #111' }}>
+          <div style={{ maxWidth: '1300px', margin: '0 auto', padding: '0 20px', display: 'flex', flexWrap: 'wrap', gap: '28px', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ flex: '1 1 520px' }}>
+              <Reveal animation="fade-up">
+                <div style={{ color: 'var(--brand-primary)', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '14px', fontSize: '0.9rem' }}>
+                  Book Your Next Presentation
+                </div>
+                <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.6rem)', fontWeight: 900, letterSpacing: '-0.04em', margin: '0 0 20px', lineHeight: 1.05 }}>
+                  Wellness that moves people in real time
+                </h2>
+                <p style={{ color: '#a1a1aa', fontSize: '1.1rem', lineHeight: 1.7, marginBottom: '28px', maxWidth: 580 }}>
+                  Need a corporate session, staff wellness briefing, or a client-facing presentation? Tell us your audience and we will propose a ready-to-deliver plan.
+                </p>
+              </Reveal>
+
+              <Reveal animation="fade-up" delay={200}>
+                <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                  <Link
+                    to="/corporate"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))', color: '#fff', padding: '14px 28px', borderRadius: 99, textDecoration: 'none', fontWeight: 700, fontSize: '1.05rem' }}
+                  >
+                    Request a Corporate Session →
+                  </Link>
+                  <Link
+                    to="/contact"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.18)', color: '#fff', padding: '14px 28px', borderRadius: 99, textDecoration: 'none', fontWeight: 700, fontSize: '1.05rem' }}
+                  >
+                    Ask a Question
+                  </Link>
+                </div>
+              </Reveal>
+            </div>
+
+            <div style={{ flex: '1 1 420px', minWidth: 280 }}>
+              <Reveal animation="scale" delay={200}>
+                <div style={{ borderRadius: 24, border: '1px solid #222', background: '#0a0a0a', padding: 26, boxShadow: '0 20px 80px rgba(0,0,0,0.6)' }}>
+                  <div style={{ color: '#d4d4d8', fontWeight: 800, letterSpacing: '-0.02em', fontSize: '1.2rem', marginBottom: 12 }}>
+                    What we include
+                  </div>
+                  {[
+                    'Custom stretching flow for your audience',
+                    'On-site or virtual delivery options',
+                    'Q&A + posture takeaways',
+                    'Follow-up recommendations',
+                  ].map((line) => (
+                    <div key={line} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10, color: '#a1a1aa' }}>
+                      <span style={{ width: 10, height: 10, borderRadius: 99, background: 'var(--brand-accent)', boxShadow: '0 0 0 6px rgba(15,173,182,0.08)' }} />
+                      <span style={{ fontSize: '0.98rem', lineHeight: 1.5 }}>{line}</span>
+                    </div>
+                  ))}
+                </div>
               </Reveal>
             </div>
           </div>
@@ -237,7 +294,7 @@ export default function Landing() {
                 </Reveal>
               </div>
 
-              <Reveal progress={progress} at={0.15} animation="zoom-in">
+              <Reveal progress={progress} at={0.15} animation="scale">
                 <div style={{ width: '100%', minWidth: '300px', maxWidth: '1000px', aspectRatio: '16/9', minHeight: '300px', borderRadius: '24px', overflow: 'hidden', border: '1px solid #222', boxShadow: '0 20px 80px rgba(0,0,0,0.8)' }}>
                   <CompareSlider
                     scrollDriven={true}
@@ -281,13 +338,40 @@ export default function Landing() {
 
           <Marquee speed={30} gap={32}>
             {[
-              "Elite Runners Club", "TechCorp Wellness", "City Police Department",
-              "National Gymnastics Team", "Local Fire Station", "University Athletics",
-              "Corporate Finance Group", "Regional Hospital Staff"
-            ].map((text, i) => (
-              <div key={i} style={{ padding: '20px 40px', fontSize: 'clamp(1.2rem, 3vw, 1.75rem)', fontWeight: 800, color: '#333', textTransform: 'uppercase', letterSpacing: '1px', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <div style={{ width: '24px', height: '24px', borderRadius: '12px', background: '#222' }}></div>
-                {text}
+              { name: 'Canadian High Commission' },
+              { name: 'Antarc Furniture' },
+              { name: "Gertrude's Children's Hospital", logoSrc: getPublicAssetUrl('clients/gertrudes.png') },
+              { name: 'The Swedish Embassy', logoSrc: getPublicAssetUrl('clients/swedish.png') },
+              { name: 'Jubilee Insurance' },
+              { name: 'A-O-N', logoSrc: getPublicAssetUrl('clients/aon.png') },
+              { name: 'Minnet Insurance' },
+              { name: 'Farm Africa' },
+            ].map((company, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: '20px 40px',
+                  fontSize: 'clamp(1.1rem, 3vw, 1.65rem)',
+                  fontWeight: 800,
+                  color: '#333',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                  whiteSpace: 'nowrap',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px',
+                }}
+              >
+                {company.logoSrc ? (
+                  <img
+                    src={company.logoSrc}
+                    alt={company.name}
+                    style={{ height: 28, width: 'auto', objectFit: 'contain', filter: 'grayscale(1) brightness(0.95)' }}
+                  />
+                ) : (
+                  <div style={{ width: '24px', height: '24px', borderRadius: '12px', background: '#222' }} />
+                )}
+                {company.name}
               </div>
             ))}
           </Marquee>
@@ -382,7 +466,7 @@ export default function Landing() {
               <p style={{ color: '#444', margin: 0, fontSize: '0.9rem' }}>© 2026 Wellness Solutions. All rights reserved.</p>
               <div style={{ display: 'flex', gap: '24px' }}>
                 <Link to="/privacy" style={{ color: '#444', textDecoration: 'none', fontSize: '0.9rem' }}>Privacy</Link>
-                <Link to="/privacy" style={{ color: '#444', textDecoration: 'none', fontSize: '0.9rem' }}>Terms</Link>
+                  <Link to="/terms" style={{ color: '#444', textDecoration: 'none', fontSize: '0.9rem' }}>Terms</Link>
                 <Link to="/contact" style={{ color: '#444', textDecoration: 'none', fontSize: '0.9rem' }}>Support</Link>
               </div>
             </div>

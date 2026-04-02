@@ -9,7 +9,8 @@ import ServicesPage from './pages/public/ServicesPage';
 import SchedulePage from './pages/public/SchedulePage';
 import Trainers from './pages/public/Trainers';
 import OrgRegister from './pages/public/OrgRegister';
-import { About, Blog, BlogPost, Privacy, Contact } from './pages/public/StaticPages';
+import Pricing from './pages/public/Pricing';
+import { About, Blog, BlogPost, Privacy, Contact, Terms, RefundPolicy, CookiePolicy, AccessibilityPolicy } from './pages/public/StaticPages';
 import { PaymentSuccess, PaymentCancel } from './pages/public/PaymentPages';
 
 // Auth pages
@@ -23,6 +24,9 @@ import NewBooking from './pages/protected/NewBooking';
 import Profile from './pages/protected/Profile';
 import Shop from './pages/protected/Shop';
 import Notifications from './pages/protected/Notifications';
+import Membership from './pages/protected/Membership';
+import Programmes from './pages/protected/Programmes';
+import ProgrammeDetail from './pages/protected/ProgrammeDetail';
 
 // Instructor
 import InstructorDashboard from './pages/protected/InstructorDashboard';
@@ -68,7 +72,12 @@ const AppRoutes: React.FC = () => {
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog/:slug" element={<BlogPost />} />
       <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/refund-policy" element={<RefundPolicy />} />
+      <Route path="/cookie-policy" element={<CookiePolicy />} />
+      <Route path="/accessibility" element={<AccessibilityPolicy />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/pricing" element={<Pricing />} />
       <Route path="/payment/success" element={<PaymentSuccess />} />
       <Route path="/payment/cancel" element={<PaymentCancel />} />
 
@@ -81,6 +90,9 @@ const AppRoutes: React.FC = () => {
       <Route path="/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
       <Route path="/booking" element={<ProtectedRoute><NewBooking /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="/membership" element={<ProtectedRoute><Membership /></ProtectedRoute>} />
+      <Route path="/programmes" element={<ProtectedRoute><Programmes /></ProtectedRoute>} />
+      <Route path="/programmes/:id" element={<ProtectedRoute><ProgrammeDetail /></ProtectedRoute>} />
       <Route path="/shop" element={<ProtectedRoute><Shop /></ProtectedRoute>} />
       <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
 
