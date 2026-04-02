@@ -1,10 +1,15 @@
 "use client";
-import { Kino, StickyHeader, Scene, Reveal, Marquee, TextReveal, ScrollTransform, Progress } from 'react-kino';
-import { Link, useNavigate } from 'react-router-dom';
+import { Kino, StickyHeader, Scene, Reveal, Marquee } from 'react-kino';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
 import { getPublicAssetUrl } from '../../config/runtime';
+import { Container } from '../../components/ui/Container';
+import { SectionHeading } from '../../components/ui/SectionHeading';
+import { SurfaceCard } from '../../components/ui/SurfaceCard';
+import { ButtonLink } from '../../components/ui/ButtonLink';
+import { KinoReveal } from '../../components/ui/KinoReveal';
 
 interface ServiceItem {
   id: number | string;
@@ -14,12 +19,8 @@ interface ServiceItem {
   type: string;
 }
 
-const btnPrimary = { background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))', color: '#fff', padding: '10px 20px', borderRadius: 99, fontWeight: 600, textDecoration: 'none', border: 'none', cursor: 'pointer', display: 'inline-block', textAlign: 'center' as const };
-const btnSecondary = { background: 'rgba(255,255,255,0.08)', color: '#fff', padding: '10px 20px', borderRadius: 99, fontWeight: 600, textDecoration: 'none', border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer', display: 'inline-block', textAlign: 'center' as const, backdropFilter: 'blur(8px)' };
-
 export default function Landing() {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [services, setServices] = useState<ServiceItem[]>([]);
   const calEmbedUrl =
     (typeof window !== 'undefined' &&
@@ -51,42 +52,144 @@ export default function Landing() {
     <div style={{ backgroundColor: '#000', color: '#fff', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       <Kino>
         <StickyHeader threshold={50} blur background="rgba(0,0,0,0.7)">
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '16px 24px', alignItems: 'center', maxWidth: '1400px', margin: '0 auto' }}>
-            <Link to="/" style={{ fontWeight: 800, fontSize: 'clamp(1rem, 3vw, 1.2rem)', letterSpacing: '-0.02em', color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ width: '32px', height: '32px', background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))', borderRadius: '8px' }}></div>
-              Wellness Solutions
-            </Link>
-            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-              {user ? (
-                <>
-                  <Link to="/dashboard" style={btnSecondary}>Dashboard</Link>
-                  <Link to="/booking" style={{ ...btnPrimary, background: '#fff', color: '#000' }}>Book a Session</Link>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" style={{ color: '#fff', textDecoration: 'none', fontWeight: 600, fontSize: '0.9rem', padding: '10px' }}>Log In</Link>
-                  <Link to="/register" style={{ ...btnPrimary, background: '#fff', color: '#000' }}>Book a Session</Link>
-                </>
-              )}
+          <Container maxWidth={1400} style={{ padding: '14px 0' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 14 }}>
+              <Link to="/" style={{ fontWeight: 900, fontSize: 'clamp(1rem, 3vw, 1.15rem)', letterSpacing: '-0.03em', color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: 32, height: 32, background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))', borderRadius: 10 }} />
+                Wellness Solutions
+              </Link>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                {user ? (
+                  <>
+                    <ButtonLink to="/dashboard" variant="ghost">Dashboard</ButtonLink>
+                    <ButtonLink to="/booking" variant="accent">Book a Session</ButtonLink>
+                  </>
+                ) : (
+                  <>
+                    <ButtonLink to="/login" variant="ghost">Log In</ButtonLink>
+                    <ButtonLink to="/register" variant="accent">Book a Session</ButtonLink>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
+          </Container>
         </StickyHeader>
 
         {/* Hero Section */}
         <Scene duration="100vh" pin={false}>
-          <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '20px', background: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url(${getPublicAssetUrl('stretch-therapy.jpg')}) center/cover` }}>
-            <Reveal animation="fade-up" delay={200}>
-              <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 6rem)', margin: 0, fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.1, background: 'linear-gradient(180deg, #fff 0%, #d4d4d8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', maxWidth: '900px' }}>
-                Transform your pain and inactivity to success and vitality
-              </h1>
-            </Reveal>
-            <Reveal animation="fade" delay={600}>
-              <p style={{ fontSize: 'clamp(1rem, 3vw, 1.5rem)', color: '#e4e4e7', marginTop: '32px', maxWidth: '700px', lineHeight: 1.6, fontWeight: 500, textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
-                Welcome to Wellness Solutions, your sanctuary for assisted stretching, functional fitness, and complete wellness.
-              </p>
-            </Reveal>
+          <div
+            style={{
+              minHeight: '100vh',
+              display: 'flex',
+              alignItems: 'center',
+              background: `radial-gradient(1200px 600px at 20% 20%, rgba(15,173,182,0.22), rgba(0,0,0,0) 55%), linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.86)), url(${getPublicAssetUrl('stretch-therapy.jpg')}) center/cover`,
+              borderBottom: '1px solid #111',
+            }}
+          >
+            <Container maxWidth={1240} style={{ padding: '120px 0 64px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 28, alignItems: 'center' }}>
+                <div>
+                  <KinoReveal animation="fade-up" delay={120}>
+                    <div style={{ color: '#d4d4d8', fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', fontSize: '0.82rem', marginBottom: 14 }}>
+                      Corrective therapy • Assisted stretching • Functional movement
+                    </div>
+                  </KinoReveal>
+                  <KinoReveal animation="fade-up" delay={220}>
+                    <h1 style={{ fontSize: 'clamp(2.4rem, 6.8vw, 4.8rem)', margin: 0, fontWeight: 950, letterSpacing: '-0.05em', lineHeight: 1.02, maxWidth: 780 }}>
+                      Transform your pain and inactivity to success and vitality
+                    </h1>
+                  </KinoReveal>
+                  <KinoReveal animation="fade" delay={420}>
+                    <p style={{ fontSize: 'clamp(1rem, 2.4vw, 1.25rem)', color: '#e4e4e7', marginTop: 18, lineHeight: 1.7, fontWeight: 520, maxWidth: 700 }}>
+                      Premium, guided programmes for posture, mobility, and long-term performance. Assessment first, then a plan you can repeat and track.
+                    </p>
+                  </KinoReveal>
+
+                  <KinoReveal animation="fade-up" delay={520}>
+                    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 22 }}>
+                      <ButtonLink to="/booking" variant="accent">Book an Assessment</ButtonLink>
+                      <ButtonLink to="/programmes" variant="secondary">Explore Programmes</ButtonLink>
+                      <ButtonLink to="/corporate" variant="ghost">Corporate Wellness</ButtonLink>
+                    </div>
+                  </KinoReveal>
+
+                  <KinoReveal animation="fade" delay={640}>
+                    <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 22, color: '#a1a1aa', fontSize: '0.95rem' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ width: 8, height: 8, borderRadius: 99, background: 'var(--brand-accent)', boxShadow: '0 0 0 6px rgba(15,173,182,0.12)' }} />
+                        Evidence-led methodology
+                      </span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ width: 8, height: 8, borderRadius: 99, background: '#fff', opacity: 0.9, boxShadow: '0 0 0 6px rgba(255,255,255,0.08)' }} />
+                        Premium studio + corporate delivery
+                      </span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ width: 8, height: 8, borderRadius: 99, background: '#fbbf24', boxShadow: '0 0 0 6px rgba(251,191,36,0.12)' }} />
+                        Trackable progress
+                      </span>
+                    </div>
+                  </KinoReveal>
+                </div>
+
+                <KinoReveal animation="scale" delay={260}>
+                  <SurfaceCard variant="glass" style={{ padding: 22 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'baseline' }}>
+                      <div style={{ fontWeight: 950, letterSpacing: '-0.03em', fontSize: '1.1rem' }}>What you get first</div>
+                      <div style={{ color: '#a1a1aa', fontSize: '0.92rem' }}>~45–60 mins</div>
+                    </div>
+                    <div style={{ marginTop: 12, display: 'grid', gap: 10 }}>
+                      {[
+                        { t: 'Baseline assessment', d: 'Posture + mobility priorities.' },
+                        { t: 'Corrective session', d: 'Immediate relief + targeted work.' },
+                        { t: 'Programme plan', d: 'Repeatable routine for momentum.' },
+                        { t: 'Next-step booking', d: 'Keep progress consistent.' },
+                      ].map((row) => (
+                        <div key={row.t} style={{ display: 'flex', gap: 12, padding: 12, borderRadius: 18, border: '1px solid rgba(255,255,255,0.10)', background: 'rgba(0,0,0,0.28)' }}>
+                          <div style={{ width: 10, height: 10, borderRadius: 99, background: 'var(--brand-primary)', boxShadow: '0 0 0 6px rgba(15,173,182,0.10)', marginTop: 6 }} />
+                          <div>
+                            <div style={{ fontWeight: 900, color: '#e4e4e7' }}>{row.t}</div>
+                            <div style={{ color: '#a1a1aa', fontSize: '0.95rem', lineHeight: 1.5 }}>{row.d}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ marginTop: 14, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                      <ButtonLink to="/booking" variant="accent">Pick a Time</ButtonLink>
+                      <ButtonLink to="/contact" variant="secondary">Ask a Question</ButtonLink>
+                    </div>
+                  </SurfaceCard>
+                </KinoReveal>
+              </div>
+            </Container>
           </div>
         </Scene>
+
+        {/* Trust strip */}
+        <section style={{ padding: '22px 0', background: '#050505', borderBottom: '1px solid #111' }}>
+          <Container maxWidth={1240}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 18, flexWrap: 'wrap' }}>
+              <div style={{ color: '#a1a1aa', fontWeight: 800, letterSpacing: '-0.02em' }}>
+                Trusted by teams and institutions
+              </div>
+              <div style={{ flex: '1 1 520px', minWidth: 280 }}>
+                <Marquee speed={32} gap={28}>
+                  {['Antarc Furniture', 'The Swedish Embassy', 'Farm Africa', 'Gertrude’s', 'AON', 'The Sweet December Scene'].map((name) => (
+                    <span key={name} style={{ color: '#d4d4d8', fontWeight: 850, letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                      {name}
+                    </span>
+                  ))}
+                </Marquee>
+              </div>
+              <div style={{ display: 'flex', gap: 14, color: '#a1a1aa', fontSize: '0.95rem', flexWrap: 'wrap' }}>
+                <span>Secure checkout</span>
+                <span>•</span>
+                <span>Responsive booking</span>
+                <span>•</span>
+                <span>Clear outcomes</span>
+              </div>
+            </div>
+          </Container>
+        </section>
 
         {/* Corporate Wellness */}
         <section style={{ padding: '140px 20px', background: '#050505', display: 'flex', justifyContent: 'center', borderTop: '1px solid #1a1a1a' }}>
@@ -135,18 +238,8 @@ export default function Landing() {
 
               <Reveal animation="fade-up" delay={200}>
                 <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                  <Link
-                    to="/corporate"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))', color: '#fff', padding: '14px 28px', borderRadius: 99, textDecoration: 'none', fontWeight: 700, fontSize: '1.05rem' }}
-                  >
-                    Request a Corporate Session →
-                  </Link>
-                  <Link
-                    to="/contact"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.18)', color: '#fff', padding: '14px 28px', borderRadius: 99, textDecoration: 'none', fontWeight: 700, fontSize: '1.05rem' }}
-                  >
-                    Ask a Question
-                  </Link>
+                  <ButtonLink to="/corporate" variant="accent">Request a Corporate Session →</ButtonLink>
+                  <ButtonLink to="/contact" variant="secondary">Ask a Question</ButtonLink>
                 </div>
               </Reveal>
             </div>
@@ -174,47 +267,50 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* Services Section */}
-        <Scene duration="250vh" pin={true}>
-          {(progress) => (
-            <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#111', position: 'relative', overflow: 'hidden' }}>
-              <div className="services-container" style={{ maxWidth: '1300px', width: '100%', padding: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px', position: 'relative', zIndex: 2, maxHeight: '100vh', overflowY: 'auto', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                <style dangerouslySetInnerHTML={{
-                  __html: `
-                  .services-container::-webkit-scrollbar { display: none; }
-                  @media (max-width: 768px) { .services-container { padding-top: 120px !important; padding-bottom: 80px !important; } }
-                `}} />
-                <div style={{ gridColumn: '1 / -1', textAlign: 'center', margin: '40px 0 20px' }}>
-                  <Reveal progress={progress} at={0.05} animation="fade-up">
-                    <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 800, margin: 0, letterSpacing: '-0.03em' }}>Our Services</h2>
-                  </Reveal>
-                </div>
+        {/* Featured outcomes / services (non-pinned) */}
+        <section style={{ padding: '110px 0', background: '#0a0a0a', borderTop: '1px solid #111' }}>
+          <Container maxWidth={1240}>
+            <KinoReveal>
+              <SectionHeading
+                eyebrow="What we solve"
+                title="Relief, alignment, and repeatable momentum."
+                subtitle="No generic routines. We start with assessment, identify movement constraints, then build a programme you can execute consistently."
+                align="center"
+              />
+            </KinoReveal>
 
-                {[
-                  { title: "Postural & Foot Analysis", desc: "Precision assessment of body alignment and gait to identify the root causes of physical imbalance, discomfort, and movement inefficiency.", at: 0.15, img: getPublicAssetUrl('personal-training.jpg') },
-                  { title: "Corrective Exercise Therapy", desc: "Targeted, personalized movement programs that restore functional mobility, correct structural imbalances, and reduce chronic tension and pain.", at: 0.35, img: getPublicAssetUrl('wellness.jpg') },
-                  { title: "Injury Prevention & Wellness", desc: "Educational workshops and comprehensive programs covering ergonomics, nutritional guidance, and injury prevention for individuals and organizations.", at: 0.55, img: getPublicAssetUrl('ergonomics.jpg') }
-                ].map((service, i) => (
-                  <Reveal key={i} progress={progress} at={service.at} animation="fade-up">
-                    <div
-                      onClick={() => navigate('/services')}
-                      style={{ background: 'linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 100%)', borderRadius: '24px', border: '1px solid #222', height: '100%', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', display: 'flex', flexDirection: 'column', cursor: 'pointer', transition: 'transform 0.3s' }}
-                      onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'}
-                      onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
-                    >
-                      <div style={{ height: '240px', width: '100%', background: `url(${service.img}) center/cover` }}></div>
-                      <div style={{ padding: '36px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                        <h3 style={{ fontSize: '1.75rem', marginBottom: '16px', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em' }}>{service.title}</h3>
-                        <p style={{ color: '#a1a1aa', lineHeight: 1.6, fontSize: '1.1rem', margin: '0 0 24px', flex: 1 }}>{service.desc}</p>
-                        <div style={{ color: 'var(--brand-primary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>View Details →</div>
+            <div className="home-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 16, marginTop: 34 }}>
+              {[
+                {
+                  t: 'Posture & Foot Analysis',
+                  d: 'Identify root causes and movement inefficiencies with a clear baseline.',
+                },
+                {
+                  t: 'Corrective Therapy',
+                  d: 'Targeted work to restore mobility, reduce tension, and improve control.',
+                },
+                {
+                  t: 'Performance Programmes',
+                  d: 'Repeatable routines and progress markers—built for consistency.',
+                },
+              ].map((card) => (
+                <div key={card.t} style={{ gridColumn: 'span 4' }}>
+                  <KinoReveal animation="fade-up">
+                    <SurfaceCard variant="dark" style={{ height: '100%', padding: 24 }}>
+                      <div style={{ fontWeight: 950, letterSpacing: '-0.03em', fontSize: '1.3rem' }}>{card.t}</div>
+                      <div style={{ color: '#a1a1aa', marginTop: 10, lineHeight: 1.7 }}>{card.d}</div>
+                      <div style={{ marginTop: 16, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                        <ButtonLink to="/booking" variant="accent">Start with Assessment</ButtonLink>
+                        <ButtonLink to="/services" variant="ghost">View Services</ButtonLink>
                       </div>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
+                    </SurfaceCard>
+                  </KinoReveal>
+                </div>
+              ))}
             </div>
-          )}
-        </Scene>
+            <style dangerouslySetInnerHTML={{ __html: `@media (max-width: 960px){ .home-grid > div { grid-column: span 12 !important; } }` }} />
+          </Container>
+        </section>
 
         {/* Eskuri Shop Section */}
         <section style={{ padding: '120px 20px', background: '#0a0a0a', display: 'flex', justifyContent: 'center', borderTop: '1px solid #1a1a1a' }}>
@@ -285,58 +381,50 @@ export default function Landing() {
         </section>
 
         {/* Premium Results + Calendar */}
-        <Scene duration="120vh" pin={true}>
+        <Scene duration="120vh" pin={false}>
           {() => (
             <section
               style={{
-                height: '100vh',
-                padding: '40px 20px',
+                padding: '110px 0',
                 background: '#000',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 24,
+                borderTop: '1px solid #111',
               }}
             >
-              <div style={{ textAlign: 'center', maxWidth: 780 }}>
-                <Reveal animation="fade-up">
-                  <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.6rem)', fontWeight: 900, letterSpacing: '-0.04em', margin: 0 }}>
-                    See the Difference
-                  </h2>
-                </Reveal>
-                <Reveal animation="fade-up" delay={200}>
-                  <p style={{ color: '#a1a1aa', fontSize: 'clamp(1rem, 2.8vw, 1.3rem)', marginTop: '16px', lineHeight: 1.7 }}>
-                    A guided corrective journey—assessment, targeted therapy, and a plan you can keep.
-                  </p>
-                </Reveal>
-              </div>
+              <Container maxWidth={1240}>
+                <KinoReveal>
+                  <SectionHeading
+                    eyebrow="How results happen"
+                    title="See the difference across sessions."
+                    subtitle="We combine assessment, targeted therapy, and a repeatable plan—then keep the experience frictionless with premium booking."
+                    align="center"
+                  />
+                </KinoReveal>
 
-              <div
-                style={{
-                  width: '100%',
-                  maxWidth: 1180,
-                  display: 'grid',
-                  gridTemplateColumns: '1.05fr 0.95fr',
-                  gap: 20,
-                  alignItems: 'stretch',
-                }}
-              >
-                <Reveal animation="fade-up">
-                  <div
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(15,173,182,0.16) 0%, rgba(0,0,0,0) 55%), #0a0a0a',
-                      border: '1px solid #222',
-                      borderRadius: 28,
-                      padding: 26,
-                      boxShadow: '0 30px 90px rgba(0,0,0,0.7)',
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      gap: 18,
-                    }}
-                  >
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'grid',
+                    gridTemplateColumns: '1.05fr 0.95fr',
+                    gap: 20,
+                    alignItems: 'stretch',
+                    marginTop: 34,
+                  }}
+                >
+                  <KinoReveal animation="fade-up">
+                    <div
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(15,173,182,0.16) 0%, rgba(0,0,0,0) 55%), #0a0a0a',
+                        border: '1px solid #222',
+                        borderRadius: 28,
+                        padding: 26,
+                        boxShadow: '0 30px 90px rgba(0,0,0,0.7)',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        gap: 18,
+                      }}
+                    >
                     <div>
                       <div style={{ color: 'var(--brand-primary)', fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', fontSize: '0.85rem', marginBottom: 10 }}>
                         What makes it premium
@@ -376,48 +464,13 @@ export default function Landing() {
                     </div>
 
                     <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                      <Link
-                        to="/booking"
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: 10,
-                          background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))',
-                          color: '#fff',
-                          padding: '14px 18px',
-                          borderRadius: 16,
-                          textDecoration: 'none',
-                          fontWeight: 950,
-                          minWidth: 220,
-                        }}
-                      >
-                        Book a Session →
-                      </Link>
-                      <Link
-                        to="/programmes"
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: 10,
-                          background: 'rgba(255,255,255,0.06)',
-                          border: '1px solid rgba(255,255,255,0.14)',
-                          color: '#fff',
-                          padding: '14px 18px',
-                          borderRadius: 16,
-                          textDecoration: 'none',
-                          fontWeight: 900,
-                          minWidth: 220,
-                        }}
-                      >
-                        View Programmes
-                      </Link>
+                      <ButtonLink to="/booking" variant="accent">Book an Assessment →</ButtonLink>
+                      <ButtonLink to="/programmes" variant="secondary">View Programmes</ButtonLink>
                     </div>
                   </div>
-                </Reveal>
+                  </KinoReveal>
 
-                <Reveal animation="fade-up" delay={150}>
+                  <KinoReveal animation="fade-up" delay={150}>
                   <div
                     style={{
                       background: 'rgba(255,255,255,0.03)',
@@ -451,24 +504,9 @@ export default function Landing() {
                     </div>
 
                     <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                      <Link
-                        to="/schedule"
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          background: 'transparent',
-                          border: '1px solid rgba(255,255,255,0.18)',
-                          color: '#cbd5e1',
-                          padding: '12px 14px',
-                          borderRadius: 14,
-                          textDecoration: 'none',
-                          fontWeight: 900,
-                          flex: '1 1 180px',
-                        }}
-                      >
-                        Open Schedule Page →
-                      </Link>
+                      <ButtonLink to="/booking" variant="ghost" style={{ flex: '1 1 180px', justifyContent: 'center' as const }}>
+                        Open Booking Page →
+                      </ButtonLink>
                       <a
                         href={calEmbedUrl}
                         target="_blank"
@@ -491,59 +529,85 @@ export default function Landing() {
                       </a>
                     </div>
                   </div>
-                </Reveal>
-              </div>
+                  </KinoReveal>
+                </div>
+                <style dangerouslySetInnerHTML={{ __html: `@media (max-width: 980px){ .premium-grid { grid-template-columns: 1fr !important; } }` }} />
+              </Container>
             </section>
           )}
         </Scene>
 
-        {/* Partners Marquee */}
-        <section style={{ padding: '80px 0', background: '#050505', overflow: 'hidden', borderTop: '1px solid #111' }}>
-          <Reveal animation="fade-up">
-            <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', fontWeight: 700, color: '#888', textAlign: 'center', marginBottom: '40px', letterSpacing: '-0.03em', padding: '0 20px' }}>
-              Organizations We've Worked With
-            </h2>
-          </Reveal>
+        {/* Method + proof artifact + FAQ */}
+        <section style={{ padding: '110px 0', background: '#050505', borderTop: '1px solid #111' }}>
+          <Container maxWidth={1240}>
+            <KinoReveal>
+              <SectionHeading
+                eyebrow="Methodology"
+                title="A simple system that compounds."
+                subtitle="You’re not buying a session—you’re buying a repeatable process that makes your body more capable over time."
+              />
+            </KinoReveal>
 
-          <Marquee speed={30} gap={32}>
-            {[
-              { name: 'Canadian High Commission' },
-              { name: 'Antarc Furniture' },
-              { name: "Gertrude's Children's Hospital", logoSrc: getPublicAssetUrl('clients/gertrudes.png') },
-              { name: 'The Swedish Embassy', logoSrc: getPublicAssetUrl('clients/swedish.png') },
-              { name: 'Jubilee Insurance' },
-              { name: 'A-O-N', logoSrc: getPublicAssetUrl('clients/aon.png') },
-              { name: 'Minnet Insurance' },
-              { name: 'Farm Africa' },
-            ].map((company, i) => (
-              <div
-                key={i}
-                style={{
-                  padding: '20px 40px',
-                  fontSize: 'clamp(1.1rem, 3vw, 1.65rem)',
-                  fontWeight: 800,
-                  color: '#333',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1px',
-                  whiteSpace: 'nowrap',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '16px',
-                }}
-              >
-                {company.logoSrc ? (
-                  <img
-                    src={company.logoSrc}
-                    alt={company.name}
-                    style={{ height: 28, width: 'auto', objectFit: 'contain', filter: 'grayscale(1) brightness(0.95)' }}
-                  />
-                ) : (
-                  <div style={{ width: '24px', height: '24px', borderRadius: '12px', background: '#222' }} />
-                )}
-                {company.name}
-              </div>
-            ))}
-          </Marquee>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 16, marginTop: 28 }}>
+              {[
+                { n: '01', t: 'Assess', d: 'Posture, mobility, and constraints—so the plan is specific.' },
+                { n: '02', t: 'Correct', d: 'Targeted therapy to remove pain drivers and restore range.' },
+                { n: '03', t: 'Build', d: 'Strength + movement patterns to keep the gains.' },
+                { n: '04', t: 'Track', d: 'Progress markers so improvement is visible, not assumed.' },
+              ].map((s) => (
+                <div key={s.n} style={{ gridColumn: 'span 3' }}>
+                  <KinoReveal animation="fade-up">
+                    <SurfaceCard variant="glass" style={{ height: '100%', padding: 22 }}>
+                      <div style={{ color: '#a1a1aa', fontWeight: 900, letterSpacing: 1.2 }}>{s.n}</div>
+                      <div style={{ fontWeight: 950, fontSize: '1.25rem', letterSpacing: '-0.03em', marginTop: 10 }}>{s.t}</div>
+                      <div style={{ color: '#a1a1aa', marginTop: 10, lineHeight: 1.7 }}>{s.d}</div>
+                    </SurfaceCard>
+                  </KinoReveal>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: 16, marginTop: 24, alignItems: 'stretch' }}>
+              <KinoReveal animation="fade-up">
+                <SurfaceCard variant="dark" style={{ padding: 26, height: '100%' }}>
+                  <div style={{ color: 'var(--brand-primary)', fontWeight: 950, letterSpacing: 2, textTransform: 'uppercase', fontSize: '0.85rem' }}>
+                    Proof artifact (preview)
+                  </div>
+                  <div style={{ fontWeight: 950, letterSpacing: '-0.04em', fontSize: '1.9rem', marginTop: 10 }}>
+                    Your programme summary, simplified.
+                  </div>
+                  <div style={{ color: '#a1a1aa', lineHeight: 1.7, marginTop: 12 }}>
+                    We turn your assessment into a clear plan: what to fix, what to strengthen, what to avoid, and what “better” looks like.
+                  </div>
+                  <div style={{ marginTop: 18, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                    <ButtonLink to="/booking" variant="accent">Get your baseline →</ButtonLink>
+                    <ButtonLink to="/contact" variant="secondary">Ask about your situation</ButtonLink>
+                  </div>
+                </SurfaceCard>
+              </KinoReveal>
+
+              <KinoReveal animation="fade-up" delay={120}>
+                <SurfaceCard variant="glass" style={{ padding: 22, height: '100%' }}>
+                  <div style={{ fontWeight: 950, letterSpacing: '-0.03em', fontSize: '1.2rem' }}>
+                    Common questions
+                  </div>
+                  <div style={{ marginTop: 12, display: 'grid', gap: 10 }}>
+                    {[
+                      { q: 'Do I need to be “fit” to start?', a: 'No. We tailor intensity to your baseline and progress safely.' },
+                      { q: 'Is this just stretching?', a: 'No. We combine assessment, therapy, and corrective movement.' },
+                      { q: 'How soon do people feel change?', a: 'Many feel relief early—durable change comes from consistency.' },
+                      { q: 'Can you support teams?', a: 'Yes—on-site or hosted sessions with a repeatable plan.' },
+                    ].map((row) => (
+                      <div key={row.q} style={{ borderRadius: 18, border: '1px solid rgba(255,255,255,0.10)', background: 'rgba(0,0,0,0.25)', padding: 14 }}>
+                        <div style={{ color: '#e4e4e7', fontWeight: 900 }}>{row.q}</div>
+                        <div style={{ color: '#a1a1aa', marginTop: 6, lineHeight: 1.6 }}>{row.a}</div>
+                      </div>
+                    ))}
+                  </div>
+                </SurfaceCard>
+              </KinoReveal>
+            </div>
+          </Container>
         </section>
 
         {/* Static Testimonials */}
@@ -587,8 +651,8 @@ export default function Landing() {
             <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 800, marginBottom: '24px' }}>Ready to feel your best?</h2>
             <p style={{ color: '#888', fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto 40px', lineHeight: 1.6 }}>Join hundreds of clients who have transformed their mobility and eliminated pain.</p>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link to="/register" style={{ ...btnPrimary, padding: '18px 48px', fontSize: '1.1rem' }}>Book Your First Session</Link>
-              <Link to="/services" style={{ ...btnSecondary, padding: '18px 48px', fontSize: '1.1rem' }}>View All Programs</Link>
+              <ButtonLink to="/booking" variant="accent" style={{ padding: '18px 40px', fontSize: '1.05rem', fontWeight: 950 }}>Book Your First Session</ButtonLink>
+              <ButtonLink to="/programmes" variant="secondary" style={{ padding: '18px 40px', fontSize: '1.05rem', fontWeight: 950 }}>View Programmes</ButtonLink>
             </div>
           </Reveal>
         </section>
