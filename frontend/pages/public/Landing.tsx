@@ -1,5 +1,5 @@
 "use client";
-import { Kino, StickyHeader, Scene, Reveal, CompareSlider, Marquee, TextReveal, ScrollTransform, Progress } from 'react-kino';
+import { Kino, StickyHeader, Scene, Reveal, Marquee, TextReveal, ScrollTransform, Progress } from 'react-kino';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useEffect, useState } from 'react';
@@ -21,6 +21,11 @@ export default function Landing() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [services, setServices] = useState<ServiceItem[]>([]);
+  const calEmbedUrl =
+    (typeof window !== 'undefined' &&
+      (window.WellnessSolutionsConfig as any)?.calEmbedUrl) ||
+    // Replace this with your Cal.com embed URL when wiring the production config.
+    'https://cal.com/';
 
   useEffect(() => {
     api.get('/classes/').then(res => {
@@ -72,7 +77,7 @@ export default function Landing() {
           <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '20px', background: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url(${getPublicAssetUrl('stretch-therapy.jpg')}) center/cover` }}>
             <Reveal animation="fade-up" delay={200}>
               <h1 style={{ fontSize: 'clamp(2.5rem, 8vw, 6rem)', margin: 0, fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.1, background: 'linear-gradient(180deg, #fff 0%, #d4d4d8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', maxWidth: '900px' }}>
-                Rejuvenate Your Body,<br />Restore Your Mind
+                Transform your pain and inactivity to success and vitality
               </h1>
             </Reveal>
             <Reveal animation="fade" delay={600}>
@@ -279,51 +284,215 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* Before / After Comparison */}
-        <Scene duration="150vh" pin={true}>
-          {(progress) => (
-            <section style={{ height: '100vh', padding: '40px 20px', background: '#000', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ textAlign: 'center', marginBottom: '40px', maxWidth: '700px' }}>
-                <Reveal progress={progress} at={0.05} animation="fade-up">
-                  <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 800, letterSpacing: '-0.03em', margin: 0 }}>See the Difference</h2>
+        {/* Premium Results + Calendar */}
+        <Scene duration="120vh" pin={true}>
+          {() => (
+            <section
+              style={{
+                height: '100vh',
+                padding: '40px 20px',
+                background: '#000',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 24,
+              }}
+            >
+              <div style={{ textAlign: 'center', maxWidth: 780 }}>
+                <Reveal animation="fade-up">
+                  <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.6rem)', fontWeight: 900, letterSpacing: '-0.04em', margin: 0 }}>
+                    See the Difference
+                  </h2>
                 </Reveal>
-                <Reveal progress={progress} at={0.1} animation="fade-up">
-                  <p style={{ color: '#a1a1aa', fontSize: 'clamp(1rem, 3vw, 1.25rem)', marginTop: '16px', lineHeight: 1.6 }}>
-                    Our clients experience noticeable improvements in their posture, flexibility, and overall mobility after just one session.
+                <Reveal animation="fade-up" delay={200}>
+                  <p style={{ color: '#a1a1aa', fontSize: 'clamp(1rem, 2.8vw, 1.3rem)', marginTop: '16px', lineHeight: 1.7 }}>
+                    A guided corrective journey—assessment, targeted therapy, and a plan you can keep.
                   </p>
                 </Reveal>
               </div>
 
-              <Reveal progress={progress} at={0.15} animation="scale">
-                <div style={{ width: '100%', minWidth: '300px', maxWidth: '1000px', aspectRatio: '16/9', minHeight: '300px', borderRadius: '24px', overflow: 'hidden', border: '1px solid #222', boxShadow: '0 20px 80px rgba(0,0,0,0.8)' }}>
-                  <CompareSlider
-                    scrollDriven={true}
-                    progress={Math.max(0, Math.min(1, (progress - 0.2) * 1.5))}
-                    before={
-                      <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #1e1e1e 0%, #000 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px', textAlign: 'center' }}>
-                        <div style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', marginBottom: '16px', opacity: 0.5 }}>😫</div>
-                        <h3 style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', color: '#fff', margin: 0, fontWeight: 700 }}>Before Therapy</h3>
-                        <ul style={{ color: '#a1a1aa', fontSize: 'clamp(0.9rem, 2vw, 1.2rem)', marginTop: '24px', listStyle: 'none', padding: 0, lineHeight: 2, fontWeight: 500 }}>
-                          <li><span style={{ color: '#ef4444', marginRight: '12px' }}>✕</span> Limited mobility</li>
-                          <li><span style={{ color: '#ef4444', marginRight: '12px' }}>✕</span> Poor posture</li>
-                          <li><span style={{ color: '#ef4444', marginRight: '12px' }}>✕</span> Chronic tension</li>
-                        </ul>
+              <div
+                style={{
+                  width: '100%',
+                  maxWidth: 1180,
+                  display: 'grid',
+                  gridTemplateColumns: '1.05fr 0.95fr',
+                  gap: 20,
+                  alignItems: 'stretch',
+                }}
+              >
+                <Reveal animation="fade-up">
+                  <div
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(15,173,182,0.16) 0%, rgba(0,0,0,0) 55%), #0a0a0a',
+                      border: '1px solid #222',
+                      borderRadius: 28,
+                      padding: 26,
+                      boxShadow: '0 30px 90px rgba(0,0,0,0.7)',
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      gap: 18,
+                    }}
+                  >
+                    <div>
+                      <div style={{ color: 'var(--brand-primary)', fontWeight: 900, letterSpacing: 2, textTransform: 'uppercase', fontSize: '0.85rem', marginBottom: 10 }}>
+                        What makes it premium
                       </div>
-                    }
-                    after={
-                      <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px', textAlign: 'center' }}>
-                        <div style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', marginBottom: '16px' }}>😎</div>
-                        <h3 style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', color: '#fff', margin: 0, fontWeight: 700 }}>After Therapy</h3>
-                        <ul style={{ color: '#fff', fontSize: 'clamp(0.9rem, 2vw, 1.2rem)', marginTop: '24px', listStyle: 'none', padding: 0, lineHeight: 2, fontWeight: 500 }}>
-                          <li><span style={{ color: 'var(--brand-accent)', marginRight: '12px' }}>✓</span> Improved flexibility</li>
-                          <li><span style={{ color: 'var(--brand-accent)', marginRight: '12px' }}>✓</span> Better posture</li>
-                          <li><span style={{ color: 'var(--brand-accent)', marginRight: '12px' }}>✓</span> Reduced tension</li>
-                        </ul>
+                      <div style={{ fontSize: '2rem', fontWeight: 950, marginBottom: 10, letterSpacing: '-0.03em' }}>
+                        Clinical clarity. Real progress.
                       </div>
-                    }
-                  />
-                </div>
-              </Reveal>
+                      <div style={{ color: '#a1a1aa', lineHeight: 1.7, fontSize: '1.05rem', marginBottom: 14 }}>
+                        We design programmes around your body—then you track your improvement across sessions.
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                        {[
+                          { label: 'Assessment first', value: 'Personalised baseline' },
+                          { label: 'Guided sessions', value: 'Corrective therapy' },
+                          { label: 'Programme plan', value: 'Repeatable routines' },
+                          { label: 'Next bookings', value: 'Keep momentum' },
+                        ].map((item) => (
+                          <div
+                            key={item.label}
+                            style={{
+                              background: 'rgba(255,255,255,0.04)',
+                              border: '1px solid rgba(255,255,255,0.08)',
+                              borderRadius: 20,
+                              padding: 14,
+                            }}
+                          >
+                            <div style={{ color: '#d4d4d8', fontWeight: 900, fontSize: '0.95rem', marginBottom: 6 }}>
+                              {item.label}
+                            </div>
+                            <div style={{ color: '#a1a1aa', fontSize: '0.92rem', lineHeight: 1.5 }}>
+                              {item.value}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                      <Link
+                        to="/booking"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: 10,
+                          background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))',
+                          color: '#fff',
+                          padding: '14px 18px',
+                          borderRadius: 16,
+                          textDecoration: 'none',
+                          fontWeight: 950,
+                          minWidth: 220,
+                        }}
+                      >
+                        Book a Session →
+                      </Link>
+                      <Link
+                        to="/programmes"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: 10,
+                          background: 'rgba(255,255,255,0.06)',
+                          border: '1px solid rgba(255,255,255,0.14)',
+                          color: '#fff',
+                          padding: '14px 18px',
+                          borderRadius: 16,
+                          textDecoration: 'none',
+                          fontWeight: 900,
+                          minWidth: 220,
+                        }}
+                      >
+                        View Programmes
+                      </Link>
+                    </div>
+                  </div>
+                </Reveal>
+
+                <Reveal animation="fade-up" delay={150}>
+                  <div
+                    style={{
+                      background: 'rgba(255,255,255,0.03)',
+                      border: '1px solid #222',
+                      borderRadius: 28,
+                      padding: 20,
+                      height: '100%',
+                      boxShadow: '0 30px 90px rgba(0,0,0,0.55)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 14,
+                    }}
+                  >
+                    <div>
+                      <div style={{ color: '#d4d4d8', fontWeight: 900, fontSize: '1.05rem', marginBottom: 6 }}>
+                        Pick your time
+                      </div>
+                      <div style={{ color: '#a1a1aa', lineHeight: 1.6 }}>
+                        Use the calendar below to schedule an assessment or session.
+                      </div>
+                    </div>
+
+                    <div style={{ flex: 1, minHeight: 340, borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.10)', background: '#050505' }}>
+                      <iframe
+                        title="Cal.com booking calendar"
+                        src={calEmbedUrl}
+                        style={{ width: '100%', height: '100%', border: 0, background: '#050505' }}
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                      />
+                    </div>
+
+                    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                      <Link
+                        to="/schedule"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          background: 'transparent',
+                          border: '1px solid rgba(255,255,255,0.18)',
+                          color: '#cbd5e1',
+                          padding: '12px 14px',
+                          borderRadius: 14,
+                          textDecoration: 'none',
+                          fontWeight: 900,
+                          flex: '1 1 180px',
+                        }}
+                      >
+                        Open Schedule Page →
+                      </Link>
+                      <a
+                        href={calEmbedUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          background: 'rgba(255,255,255,0.06)',
+                          border: '1px solid rgba(255,255,255,0.14)',
+                          color: '#fff',
+                          padding: '12px 14px',
+                          borderRadius: 14,
+                          textDecoration: 'none',
+                          fontWeight: 900,
+                          flex: '1 1 180px',
+                        }}
+                      >
+                        Launch Calendar ↗
+                      </a>
+                    </div>
+                  </div>
+                </Reveal>
+              </div>
             </section>
           )}
         </Scene>
